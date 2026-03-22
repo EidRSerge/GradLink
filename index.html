@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GradLink USEK – Bridging Talent & Opportunity</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:   #0D2B55;
+    --blue:   #1A56A0;
+    --sky:    #3B82C4;
+    --ice:    #D6E8F7;
+    --white:  #FFFFFF;
+    --grey-light: #F4F6F9;
+    --grey:   #8898AA;
+    --grey-dark: #3D4F63;
+    --accent: #E8A020;
+    --red:    #C0392B;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--navy);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px;
+    height: 68px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(13,43,85,0.08);
+    box-shadow: 0 2px 24px rgba(13,43,85,0.06);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo-mark {
+    width: 34px; height: 34px;
+    background: var(--navy);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-logo-mark svg { width: 20px; height: 20px; fill: var(--white); }
+  .nav-logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem; font-weight: 700;
+    color: var(--navy); letter-spacing: 0.02em;
+  }
+  .nav-logo-text span { color: var(--sky); }
+  .nav-links { display: flex; gap: 8px; align-items: center; }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.875rem; font-weight: 500;
+    color: var(--grey-dark);
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    background: var(--ice); color: var(--navy);
+  }
+  .nav-cta {
+    background: var(--navy) !important;
+    color: var(--white) !important;
+    border-radius: 8px !important;
+  }
+  .nav-cta:hover { background: var(--blue) !important; }
+
+  /* ── PAGES ── */
+  .page { display: none; min-height: 100vh; padding-top: 68px; }
+  .page.active { display: block; }
+
+  /* ──────────────────────────────────
+     HOME PAGE
+  ────────────────────────────────── */
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 68px);
+    display: flex; align-items: center;
+    background: linear-gradient(145deg, var(--navy) 0%, var(--blue) 60%, var(--sky) 100%);
+    overflow: hidden;
+    padding: 80px 80px 80px 80px;
+  }
+  .hero-bg-pattern {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 70% 30%, rgba(59,130,196,0.3) 0%, transparent 50%),
+      radial-gradient(circle at 20% 80%, rgba(255,255,255,0.05) 0%, transparent 40%);
+  }
+  .hero-grid-overlay {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 640px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    padding: 6px 16px 6px 8px;
+    margin-bottom: 32px;
+    color: var(--ice);
+    font-size: 0.8rem; font-weight: 500; letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .hero-badge-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.2); }
+  }
+  .hero h1 {
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .hero h1 em { font-style: italic; color: var(--ice); }
+  .hero p {
+    font-size: 1.15rem; line-height: 1.7;
+    color: rgba(214,232,247,0.85);
+    max-width: 520px;
+    margin-bottom: 40px;
+  }
+  .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    padding: 14px 32px;
+    background: var(--white);
+    color: var(--navy);
+    border: none; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--ice); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .btn-secondary {
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--white);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+  }
+  .btn-secondary:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+
+  .hero-visual {
+    position: absolute; right: 60px; top: 50%;
+    transform: translateY(-50%);
+    width: 420px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .hero-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px;
+    padding: 20px 24px;
+    backdrop-filter: blur(12px);
+    animation: floatCard 4s ease-in-out infinite;
+  }
+  .hero-card:nth-child(2) { animation-delay: 1.5s; margin-left: 40px; }
+  .hero-card:nth-child(3) { animation-delay: 0.8s; }
+  @keyframes floatCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .hero-card-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ice); opacity: 0.7; margin-bottom: 6px; }
+  .hero-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--white); }
+  .hero-card-sub { font-size: 0.8rem; color: rgba(214,232,247,0.7); margin-top: 4px; }
+  .hero-card-tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .tag {
+    font-size: 0.7rem; font-weight: 500;
+    padding: 3px 10px; border-radius: 100px;
+    background: rgba(255,255,255,0.15);
+    color: var(--ice);
+  }
+  .tag.accent { background: rgba(232,160,32,0.3); color: var(--accent); }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--ice);
+  }
+  .stat-item {
+    flex: 1; padding: 32px 24px;
+    text-align: center;
+    border-right: 1px solid var(--ice);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem; font-weight: 700;
+    color: var(--navy);
+  }
+  .stat-label { font-size: 0.875rem; color: var(--grey); margin-top: 4px; }
+
+  /* How it works */
+  .section { padding: 96px 80px; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--sky);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700; color: var(--navy);
+    line-height: 1.15; margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 1.05rem; color: var(--grey);
+    max-width: 560px; line-height: 1.7; margin-bottom: 56px;
+  }
+  .section.bg-grey { background: var(--grey-light); }
+
+  .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .how-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 36px 32px;
+    border: 1px solid rgba(13,43,85,0.08);
+    position: relative; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .how-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(13,43,85,0.1); }
+  .how-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--navy), var(--sky));
+  }
+  .how-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem; font-weight: 700;
+    color: var(--ice);
+    line-height: 1; margin-bottom: 16px;
+  }
+  .how-card h3 { font-size: 1.35rem; font-weight: 600; margin-bottom: 10px; color: var(--navy); }
+  .how-card p { font-size: 0.9rem; line-height: 1.7; color: var(--grey); }
+
+  /* Audience split */
+  .audience-split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .audience-card {
+    border-radius: 20px; padding: 52px 48px;
+    cursor: pointer; transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .audience-card.student { background: var(--navy); }
+  .audience-card.business { background: var(--sky); }
+  .audience-card::after {
+    content: '';
+    position: absolute; bottom: -60px; right: -60px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .audience-card-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    font-size: 1.5rem;
+  }
+  .audience-card h3 {
+    font-size: 1.8rem; font-weight: 700;
+    color: var(--white); margin-bottom: 12px;
+  }
+  .audience-card p { font-size: 0.95rem; color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 28px; }
+  .audience-card .btn-white {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--white); border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem; font-weight: 600;
+    text-decoration: none;
+    cursor: pointer; border: none;
+    transition: all 0.2s;
+  }
+  .audience-card.student .btn-white { color: var(--navy); }
+  .audience-card.business .btn-white { color: var(--sky); }
+  .audience-card .btn-white:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+
+  /* Partners strip */
+  .partners { padding: 56px 80px; border-top: 1px solid var(--ice); }
+  .partners-label { text-align: center; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); margin-bottom: 32px; }
+  .partners-logos { display: flex; justify-content: center; gap: 40px; align-items: center; flex-wrap: wrap; }
+  .partner-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--grey);
+    opacity: 0.5;
+    letter-spacing: 0.05em;
+    transition: opacity 0.2s;
+  }
+  .partner-logo:hover { opacity: 0.9; }
+
+  /* ──────────────────────────────────
+     STUDENTS PAGE
+  ────────────────────────────────── */
+  .page-hero {
+    background: linear-gradient(130deg, var(--navy) 0%, var(--blue) 100%);
+    padding: 80px 80px 64px;
+    position: relative; overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(59,130,196,0.2);
+  }
+  .page-hero-content { position: relative; z-index: 2; max-width: 600px; }
+  .page-hero .hero-badge { margin-bottom: 20px; }
+  .page-hero h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); color: var(--white); font-weight: 700; line-height: 1.15; margin-bottom: 16px; }
+  .page-hero p { font-size: 1.05rem; color: rgba(214,232,247,0.85); line-height: 1.7; }
+
+  /* Auth tabs */
+  .auth-section { padding: 64px 80px; background: var(--grey-light); }
+  .auth-tabs { display: flex; gap: 0; background: var(--white); border: 1px solid var(--ice); border-radius: 12px; padding: 6px; width: fit-content; margin-bottom: 40px; }
+  .auth-tab {
+    padding: 10px 28px;
+    border: none; background: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; font-weight: 500;
+    color: var(--grey); cursor: pointer;
+    transition: all 0.2s;
+  }
+  .auth-tab.active { background: var(--navy); color: var(--white); }
+
+  .auth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+  .auth-card, .card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 36px 32px;
+    border: 1px solid rgba(13,43,85,0.08);
+    box-shadow: 0 2px 16px rgba(13,43,85,0.05);
+  }
+  .card-title { font-size: 1.35rem; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .card-sub { font-size: 0.875rem; color: var(--grey); margin-bottom: 24px; }
+
+  .form-field { margin-bottom: 18px; }
+  .form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--grey-dark); margin-bottom: 6px; letter-spacing: 0.03em; }
+  .form-input, .form-select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #DDE3EC;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; color: var(--navy);
+    background: var(--white);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(59,130,196,0.12); }
+  .form-input::placeholder { color: var(--grey); opacity: 0.7; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .btn-full {
+    width: 100%; padding: 13px;
+    background: var(--navy);
+    color: var(--white); border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-full:hover { background: var(--blue); }
+  .btn-full.sky { background: var(--sky); }
+  .btn-full.sky:hover { background: var(--blue); }
+
+  .info-note {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--ice);
+    border-radius: 10px; padding: 14px 16px;
+    font-size: 0.82rem; color: var(--navy); line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .info-note-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* Profile showcase */
+  .students-showcase { padding: 64px 80px; }
+  .showcase-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
+  .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; }
+  .filter-chip {
+    padding: 8px 16px;
+    border: 1.5px solid #DDE3EC;
+    border-radius: 100px;
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 500;
+    color: var(--grey-dark); cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-chip:hover, .filter-chip.active { border-color: var(--navy); color: var(--navy); background: var(--ice); }
+  .filter-chip.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+  .profiles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .profile-card {
+    background: var(--white);
+    border: 1px solid rgba(13,43,85,0.08);
+    border-radius: 16px; padding: 24px;
+    transition: all 0.3s; cursor: pointer;
+  }
+  .profile-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(13,43,85,0.1); border-color: var(--sky); }
+  .profile-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 700; color: var(--white);
+    flex-shrink: 0;
+  }
+  .av-1 { background: linear-gradient(135deg, var(--navy), var(--sky)); }
+  .av-2 { background: linear-gradient(135deg, #2E7D52, #48C78E); }
+  .av-3 { background: linear-gradient(135deg, #7B2D8B, #C66BE9); }
+  .av-4 { background: linear-gradient(135deg, #B8520A, #E8A020); }
+  .av-5 { background: linear-gradient(135deg, #C0392B, #E74C3C); }
+  .av-6 { background: linear-gradient(135deg, #1A6985, #3AB4DC); }
+  .profile-name { font-weight: 600; font-size: 1rem; color: var(--navy); }
+  .profile-major { font-size: 0.8rem; color: var(--grey); }
+  .profile-gpa {
+    margin-left: auto;
+    font-size: 0.75rem; font-weight: 600;
+    color: var(--sky); background: var(--ice);
+    padding: 4px 10px; border-radius: 100px;
+  }
+  .profile-skills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .skill-tag {
+    font-size: 0.72rem; font-weight: 500;
+    padding: 3px 10px; border-radius: 100px;
+    background: var(--grey-light); color: var(--grey-dark);
+  }
+  .profile-meta { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--grey); }
+  .profile-meta span { display: flex; align-items: center; gap: 4px; }
+  .badge-paid {
+    font-size: 0.7rem; font-weight: 600;
+    padding: 3px 10px; border-radius: 100px;
+    background: rgba(46,125,82,0.1); color: #2E7D52;
+  }
+  .badge-unpaid {
+    font-size: 0.7rem; font-weight: 600;
+    padding: 3px 10px; border-radius: 100px;
+    background: rgba(232,160,32,0.1); color: #B8700A;
+  }
+
+  /* Opportunities listings */
+  .opportunities { padding: 64px 80px; background: var(--grey-light); }
+  .opp-grid { display: grid; gap: 16px; }
+  .opp-card {
+    background: var(--white);
+    border: 1px solid rgba(13,43,85,0.08);
+    border-radius: 14px; padding: 24px 28px;
+    display: flex; align-items: center; gap: 24px;
+    transition: all 0.25s; cursor: pointer;
+  }
+  .opp-card:hover { border-color: var(--sky); box-shadow: 0 6px 24px rgba(13,43,85,0.08); transform: translateX(4px); }
+  .opp-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--ice);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; flex-shrink: 0;
+  }
+  .opp-info { flex: 1; }
+  .opp-title { font-weight: 600; font-size: 1rem; color: var(--navy); margin-bottom: 4px; }
+  .opp-company { font-size: 0.85rem; color: var(--grey); }
+  .opp-tags { display: flex; gap: 8px; margin-top: 8px; }
+  .opp-right { text-align: right; flex-shrink: 0; }
+  .opp-type {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--sky); margin-bottom: 6px;
+  }
+  .opp-deadline { font-size: 0.78rem; color: var(--grey); }
+  .apply-btn {
+    padding: 9px 22px;
+    background: var(--navy); color: var(--white);
+    border: none; border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .apply-btn:hover { background: var(--blue); }
+
+  /* ──────────────────────────────────
+     BUSINESSES PAGE
+  ────────────────────────────────── */
+  .biz-hero { background: linear-gradient(130deg, var(--sky) 0%, var(--blue) 100%); }
+
+  .biz-section { padding: 64px 80px; }
+  .biz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+  .post-card { }
+  .section-divider {
+    display: flex; align-items: center; gap: 16px;
+    margin: 48px 0 32px;
+  }
+  .section-divider hr { flex: 1; border: none; border-top: 1px solid var(--ice); }
+  .section-divider span { font-size: 0.8rem; color: var(--grey); font-weight: 500; white-space: nowrap; }
+
+  .students-filter { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+
+  .biz-profiles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .partner-cta {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    border-radius: 20px;
+    padding: 52px 56px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 40px; margin-top: 48px;
+  }
+  .partner-cta h3 { font-size: 1.8rem; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+  .partner-cta p { font-size: 0.95rem; color: rgba(214,232,247,0.8); line-height: 1.6; max-width: 440px; }
+  .partner-cta .btn-white-lg {
+    padding: 15px 36px;
+    background: var(--white);
+    color: var(--navy);
+    border: none; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .partner-cta .btn-white-lg:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+  /* ──────────────────────────────────
+     CONTACT PAGE
+  ────────────────────────────────── */
+  .contact-section { padding: 80px 80px; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: start; }
+  .contact-info h2 { font-size: 2.4rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; }
+  .contact-info p { font-size: 1rem; color: var(--grey); line-height: 1.75; margin-bottom: 40px; }
+  .contact-methods { display: flex; flex-direction: column; gap: 20px; }
+  .contact-method {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px 22px;
+    background: var(--grey-light);
+    border-radius: 14px;
+  }
+  .contact-method-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .contact-method h4 { font-size: 0.85rem; font-weight: 600; color: var(--navy); margin-bottom: 4px; font-family: 'DM Sans', sans-serif; }
+  .contact-method p { font-size: 0.875rem; color: var(--grey); margin: 0; }
+  .contact-form { background: var(--white); border: 1px solid rgba(13,43,85,0.08); border-radius: 20px; padding: 40px; box-shadow: 0 4px 24px rgba(13,43,85,0.06); }
+  .contact-form h3 { font-size: 1.5rem; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .contact-form .form-sub { font-size: 0.875rem; color: var(--grey); margin-bottom: 28px; }
+
+  .radio-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .radio-opt {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
+    border: 1.5px solid #DDE3EC;
+    border-radius: 8px; cursor: pointer;
+    font-size: 0.85rem; color: var(--grey-dark);
+    transition: all 0.2s;
+  }
+  .radio-opt input { display: none; }
+  .radio-opt:has(input:checked), .radio-opt.checked {
+    border-color: var(--navy); color: var(--navy); background: var(--ice);
+  }
+
+  /* ──────────────────────────────────
+     FOOTER
+  ────────────────────────────────── */
+  footer {
+    background: var(--navy);
+    padding: 48px 80px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem; font-weight: 700;
+    color: var(--white);
+  }
+  footer .footer-logo span { color: var(--sky); }
+  footer p { font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-top: 6px; }
+  footer .footer-links { display: flex; gap: 24px; }
+  footer .footer-links a {
+    font-size: 0.85rem; color: rgba(255,255,255,0.55);
+    text-decoration: none; cursor: pointer; transition: color 0.2s;
+  }
+  footer .footer-links a:hover { color: var(--white); }
+
+  /* ── Misc ── */
+  .divider { height: 1px; background: var(--ice); }
+
+  .success-banner {
+    display: none;
+    background: rgba(46,125,82,0.1);
+    border: 1px solid rgba(46,125,82,0.3);
+    border-radius: 10px; padding: 14px 18px;
+    font-size: 0.875rem; color: #2E7D52;
+    margin-top: 16px; align-items: center; gap: 8px;
+  }
+  .success-banner.show { display: flex; }
+
+  textarea.form-input { resize: vertical; min-height: 110px; }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .hero { padding: 60px 24px; }
+    .hero-visual { display: none; }
+    .section, .auth-section, .students-showcase, .opportunities, .biz-section, .contact-section, .partners { padding: 56px 24px; }
+    .how-grid, .audience-split, .auth-grid, .biz-grid, .contact-grid { grid-template-columns: 1fr; }
+    .profiles-grid, .biz-profiles-grid { grid-template-columns: 1fr 1fr; }
+    .stats-bar { flex-wrap: wrap; }
+    .partner-cta { flex-direction: column; }
+    .students-filter { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 24px; text-align: center; }
+    .nav-links a:not(.nav-cta) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="nav-logo-text">GradLink <span>USEK</span></span>
+  </a>
+  <div class="nav-links">
+    <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
+    <a onclick="showPage('students')" id="nav-students">Students</a>
+    <a onclick="showPage('businesses')" id="nav-businesses">Businesses</a>
+    <a onclick="showPage('contact')" id="nav-contact">Contact</a>
+    <a onclick="showPage('students')" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════ HOME PAGE ═══════════════════════ -->
+<div id="page-home" class="page active">
+
+  <section class="hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        Powered by USEK · Kaslik, Lebanon
+      </div>
+      <h1>Where <em>Talent</em> Meets Opportunity</h1>
+      <p>GradLink USEK connects students and alumni of the Holy Spirit University of Kaslik with leading businesses — opening doors to internships, jobs, projects, and partnerships.</p>
+      <div class="hero-buttons">
+        <button class="btn-primary" onclick="showPage('students')">I'm a Student</button>
+        <button class="btn-secondary" onclick="showPage('businesses')">I'm a Business</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-card-label">New Opportunity</div>
+        <div class="hero-card-title">Junior Marketing Analyst</div>
+        <div class="hero-card-sub">Deloitte Lebanon · Beirut CBD</div>
+        <div class="hero-card-tags">
+          <span class="tag">Full-time</span>
+          <span class="tag accent">Paid</span>
+          <span class="tag">Marketing</span>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">Student Profile</div>
+        <div class="hero-card-title">Sara K. — Engineering</div>
+        <div class="hero-card-sub">GPA 3.8 · Available immediately</div>
+        <div class="hero-card-tags">
+          <span class="tag">Python</span>
+          <span class="tag">AutoCAD</span>
+          <span class="tag">Beirut</span>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">Internship Match</div>
+        <div class="hero-card-title">Finance Intern — BankMed</div>
+        <div class="hero-card-sub">3 months · Hybrid · Paid</div>
+        <div class="hero-card-tags">
+          <span class="tag">Finance</span>
+          <span class="tag">Summer 2025</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-number">4,200+</div>
+      <div class="stat-label">Registered Students & Alumni</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">180+</div>
+      <div class="stat-label">Partner Businesses</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">850+</div>
+      <div class="stat-label">Active Opportunities</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">92%</div>
+      <div class="stat-label">Graduate Placement Rate</div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <section class="section bg-grey">
+    <div class="section-label">How it Works</div>
+    <h2 class="section-title">From Profile to Placement in Three Steps</h2>
+    <p class="section-sub">A streamlined platform designed to make talent discovery and career opportunity effortless for both students and employers.</p>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">01</div>
+        <h3>Create Your Profile</h3>
+        <p>Students sign in with their USEK university email and build a rich profile — major, GPA, skills, experience, preferred location, and compensation type.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <h3>Discover & Connect</h3>
+        <p>Businesses browse verified student profiles and post opportunities. Students explore curated jobs, internships, and projects from USEK-partnered companies.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+        <h3>Apply & Grow</h3>
+        <p>Students apply directly through the platform. Businesses track applications and reach out. Matches are made, careers are launched.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Audience cards -->
+  <section class="section">
+    <div class="section-label">Who's it For?</div>
+    <h2 class="section-title">Built for Two Audiences, Perfectly Aligned</h2>
+    <p class="section-sub">Whether you're launching your career or growing your team, GradLink USEK has the tools you need.</p>
+    <div class="audience-split">
+      <div class="audience-card student">
+        <div class="audience-card-icon">🎓</div>
+        <h3>Students & Alumni</h3>
+        <p>Showcase your academic profile to Lebanon's top employers. Filter opportunities by type, compensation, location, and field. Apply in one click.</p>
+        <button class="btn-white" onclick="showPage('students')">Explore for Students →</button>
+      </div>
+      <div class="audience-card business">
+        <div class="audience-card-icon">🏢</div>
+        <h3>Businesses & Partners</h3>
+        <p>Access a verified talent pool from one of Lebanon's top universities. Post openings, search profiles by major and skills, and partner with USEK officially.</p>
+        <button class="btn-white" onclick="showPage('businesses')">Explore for Businesses →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners -->
+  <div class="partners">
+    <div class="partners-label">Trusted by leading organizations across Lebanon</div>
+    <div class="partners-logos">
+      <div class="partner-logo">Deloitte</div>
+      <div class="partner-logo">BankMed</div>
+      <div class="partner-logo">Byblos Bank</div>
+      <div class="partner-logo">Boecker</div>
+      <div class="partner-logo">Alfa</div>
+      <div class="partner-logo">BDL</div>
+      <div class="partner-logo">Malia Group</div>
+    </div>
+  </div>
+
+  <footer>
+    <div>
+      <div class="footer-logo">GradLink <span>USEK</span></div>
+      <p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p>
+    </div>
+    <div class="footer-links">
+      <a onclick="showPage('students')">Students</a>
+      <a onclick="showPage('businesses')">Businesses</a>
+      <a onclick="showPage('contact')">Contact</a>
+      <a href="https://www.usek.edu.lb" target="_blank">USEK.edu.lb</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════ STUDENTS PAGE ═══════════════════════ -->
+<div id="page-students" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        For USEK Students & Alumni
+      </div>
+      <h1>Launch Your Career from Day One</h1>
+      <p>Sign in with your USEK email, build your profile, and unlock access to hundreds of curated opportunities from Lebanon's leading companies.</p>
+    </div>
+  </div>
+
+  <!-- Sign in / Register -->
+  <section class="auth-section">
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab(this,'signin')">Sign In</button>
+      <button class="auth-tab" onclick="switchTab(this,'register')">Create Profile</button>
+    </div>
+
+    <div class="auth-grid">
+      <!-- Sign In form -->
+      <div id="tab-signin" class="auth-card">
+        <div class="card-title">Welcome Back</div>
+        <div class="card-sub">Sign in with your USEK university email.</div>
+        <div class="info-note">
+          <span class="info-note-icon">ℹ️</span>
+          Only <strong>@students.usek.edu.lb</strong> or <strong>@usek.edu.lb</strong> email addresses are accepted.
+        </div>
+        <div class="form-field">
+          <label class="form-label">University Email</label>
+          <input class="form-input" type="email" placeholder="firstname.lastname@students.usek.edu.lb"/>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" placeholder="Your password"/>
+        </div>
+        <button class="btn-full" onclick="showSuccess('signin-success')">Sign In to GradLink</button>
+        <div id="signin-success" class="success-banner">✅ Signed in! Redirecting to your dashboard…</div>
+      </div>
+
+      <!-- What you get -->
+      <div class="card">
+        <div class="card-title">What You Unlock</div>
+        <div class="card-sub">A profile on GradLink USEK gives you access to:</div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px;">
+          <div class="info-note"><span class="info-note-icon">💼</span><span>Hundreds of internships, jobs, and projects posted by USEK-verified partner businesses.</span></div>
+          <div class="info-note"><span class="info-note-icon">🔍</span><span>Visibility to recruiters who can search and filter by major, skills, GPA, and more.</span></div>
+          <div class="info-note"><span class="info-note-icon">⚡</span><span>One-click applications and real-time notifications when companies view your profile.</span></div>
+          <div class="info-note"><span class="info-note-icon">📍</span><span>Filter opportunities by location, paid/unpaid, type, and field.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register form (hidden by default) -->
+    <div id="tab-register" style="display:none; margin-top:32px;">
+      <div class="auth-card" style="max-width:720px;">
+        <div class="card-title">Create Your Profile</div>
+        <div class="card-sub">Fill in your details to be discovered by partner businesses.</div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">First Name</label>
+            <input class="form-input" type="text" placeholder="Sara"/>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" type="text" placeholder="Khoury"/>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">University Email</label>
+          <input class="form-input" type="email" placeholder="sara.khoury@students.usek.edu.lb"/>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Faculty / Major</label>
+            <select class="form-select">
+              <option>Business Administration</option>
+              <option>Engineering</option>
+              <option>Computer Science</option>
+              <option>Medicine & Medical Sciences</option>
+              <option>Arts & Social Sciences</option>
+              <option>Law & Political Science</option>
+              <option>Architecture & Design</option>
+              <option>Sciences</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">GPA (out of 4.0)</label>
+            <input class="form-input" type="text" placeholder="e.g. 3.75"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Year of Study</label>
+            <select class="form-select">
+              <option>1st Year</option>
+              <option>2nd Year</option>
+              <option>3rd Year</option>
+              <option>4th Year</option>
+              <option>Graduate / Alumni</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Preferred Work Location</label>
+            <select class="form-select">
+              <option>Beirut</option>
+              <option>Mount Lebanon</option>
+              <option>North Lebanon</option>
+              <option>South Lebanon</option>
+              <option>Bekaa</option>
+              <option>Remote / Anywhere</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Skills (comma-separated)</label>
+          <input class="form-input" type="text" placeholder="e.g. Python, Excel, Photoshop, Public Speaking"/>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Preferred Opportunity Type</label>
+          <div class="radio-group" id="opp-type-group">
+            <label class="radio-opt" onclick="toggleRadio(this,'opp-type-group')"><input type="radio" name="opp" value="job">Full-time Job</label>
+            <label class="radio-opt" onclick="toggleRadio(this,'opp-type-group')"><input type="radio" name="opp" value="intern">Internship</label>
+            <label class="radio-opt" onclick="toggleRadio(this,'opp-type-group')"><input type="radio" name="opp" value="project">Project</label>
+            <label class="radio-opt" onclick="toggleRadio(this,'opp-type-group')"><input type="radio" name="opp" value="any">Open to All</label>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Compensation Preference</label>
+          <div class="radio-group" id="pay-group">
+            <label class="radio-opt" onclick="toggleRadio(this,'pay-group')"><input type="radio" name="pay" value="paid">Paid Only</label>
+            <label class="radio-opt" onclick="toggleRadio(this,'pay-group')"><input type="radio" name="pay" value="unpaid">Open to Unpaid</label>
+            <label class="radio-opt" onclick="toggleRadio(this,'pay-group')"><input type="radio" name="pay" value="both">Both</label>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Short Bio</label>
+          <textarea class="form-input" placeholder="Tell businesses a bit about yourself, your interests, and career goals…"></textarea>
+        </div>
+        <button class="btn-full sky" onclick="showSuccess('register-success')">Create My Profile</button>
+        <div id="register-success" class="success-banner">✅ Profile created! You're now visible to partner businesses.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Browse Opportunities -->
+  <section class="opportunities">
+    <div class="section-label">Browse Opportunities</div>
+    <h2 class="section-title" style="margin-bottom:8px;">Find Your Next Step</h2>
+    <p style="color:var(--grey);margin-bottom:24px;">Filter by type, field, location, or compensation.</p>
+    <div class="filter-bar" style="margin-bottom:28px;">
+      <button class="filter-chip active">All</button>
+      <button class="filter-chip">Internships</button>
+      <button class="filter-chip">Full-time Jobs</button>
+      <button class="filter-chip">Projects</button>
+      <button class="filter-chip">Paid Only</button>
+      <button class="filter-chip">Remote</button>
+      <button class="filter-chip">Beirut</button>
+    </div>
+    <div class="opp-grid">
+      <div class="opp-card">
+        <div class="opp-icon">📊</div>
+        <div class="opp-info">
+          <div class="opp-title">Junior Financial Analyst</div>
+          <div class="opp-company">Byblos Bank · Beirut</div>
+          <div class="opp-tags"><span class="badge-paid">Paid</span><span class="skill-tag">Finance</span><span class="skill-tag">Excel</span><span class="skill-tag">Full-time</span></div>
+        </div>
+        <div class="opp-right">
+          <div class="opp-type">Full-time Job</div>
+          <div class="opp-deadline">Deadline: Aug 30</div>
+        </div>
+        <button class="apply-btn">Apply</button>
+      </div>
+      <div class="opp-card">
+        <div class="opp-icon">💻</div>
+        <div class="opp-info">
+          <div class="opp-title">Software Dev Intern</div>
+          <div class="opp-company">Alfa Telecom · Remote</div>
+          <div class="opp-tags"><span class="badge-paid">Paid</span><span class="skill-tag">Python</span><span class="skill-tag">React</span><span class="skill-tag">Summer</span></div>
+        </div>
+        <div class="opp-right">
+          <div class="opp-type">Internship</div>
+          <div class="opp-deadline">Deadline: Jul 15</div>
+        </div>
+        <button class="apply-btn">Apply</button>
+      </div>
+      <div class="opp-card">
+        <div class="opp-icon">🎨</div>
+        <div class="opp-info">
+          <div class="opp-title">Brand Design Project</div>
+          <div class="opp-company">Deloitte Lebanon · Beirut</div>
+          <div class="opp-tags"><span class="badge-unpaid">Unpaid</span><span class="skill-tag">Design</span><span class="skill-tag">Illustrator</span><span class="skill-tag">Project</span></div>
+        </div>
+        <div class="opp-right">
+          <div class="opp-type">Project</div>
+          <div class="opp-deadline">Deadline: Sep 1</div>
+        </div>
+        <button class="apply-btn">Apply</button>
+      </div>
+      <div class="opp-card">
+        <div class="opp-icon">🏗️</div>
+        <div class="opp-info">
+          <div class="opp-title">Civil Engineering Intern</div>
+          <div class="opp-company">Boecker · Jounieh</div>
+          <div class="opp-tags"><span class="badge-paid">Paid</span><span class="skill-tag">AutoCAD</span><span class="skill-tag">Engineering</span></div>
+        </div>
+        <div class="opp-right">
+          <div class="opp-type">Internship</div>
+          <div class="opp-deadline">Deadline: Aug 10</div>
+        </div>
+        <button class="apply-btn">Apply</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Student profiles visible to businesses -->
+  <section class="students-showcase">
+    <div class="showcase-header">
+      <div>
+        <div class="section-label">Student Showcase</div>
+        <h2 class="section-title" style="margin-bottom:0;">Profiles Visible to Businesses</h2>
+      </div>
+    </div>
+    <div class="filter-bar" style="margin-bottom:24px;">
+      <button class="filter-chip active">All Majors</button>
+      <button class="filter-chip">Business</button>
+      <button class="filter-chip">Engineering</button>
+      <button class="filter-chip">CS</button>
+      <button class="filter-chip">Medicine</button>
+      <button class="filter-chip">Law</button>
+    </div>
+    <div class="profiles-grid">
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar av-1">SK</div>
+          <div><div class="profile-name">Sara Khoury</div><div class="profile-major">Business Administration</div></div>
+          <div class="profile-gpa">GPA 3.8</div>
+        </div>
+        <div class="profile-skills"><span class="skill-tag">Excel</span><span class="skill-tag">Marketing</span><span class="skill-tag">French</span><span class="skill-tag">PowerPoint</span></div>
+        <div class="profile-meta"><span>📍 Beirut</span><span class="badge-paid">Paid</span></div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar av-2">JN</div>
+          <div><div class="profile-name">Joe Nasr</div><div class="profile-major">Computer Science</div></div>
+          <div class="profile-gpa">GPA 3.9</div>
+        </div>
+        <div class="profile-skills"><span class="skill-tag">Python</span><span class="skill-tag">React</span><span class="skill-tag">SQL</span><span class="skill-tag">Node.js</span></div>
+        <div class="profile-meta"><span>📍 Remote</span><span class="badge-paid">Paid</span></div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar av-3">LH</div>
+          <div><div class="profile-name">Lara Habib</div><div class="profile-major">Architecture & Design</div></div>
+          <div class="profile-gpa">GPA 3.5</div>
+        </div>
+        <div class="profile-skills"><span class="skill-tag">AutoCAD</span><span class="skill-tag">Revit</span><span class="skill-tag">SketchUp</span></div>
+        <div class="profile-meta"><span>📍 Jounieh</span><span class="badge-unpaid">Unpaid OK</span></div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar av-4">MF</div>
+          <div><div class="profile-name">Mark Frem</div><div class="profile-major">Engineering</div></div>
+          <div class="profile-gpa">GPA 3.7</div>
+        </div>
+        <div class="profile-skills"><span class="skill-tag">MATLAB</span><span class="skill-tag">AutoCAD</span><span class="skill-tag">C++</span></div>
+        <div class="profile-meta"><span>📍 Kaslik</span><span class="badge-paid">Paid</span></div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar av-5">RA</div>
+          <div><div class="profile-name">Rita Abi Nader</div><div class="profile-major">Law & Political Science</div></div>
+          <div class="profile-gpa">GPA 3.6</div>
+        </div>
+        <div class="profile-skills"><span class="skill-tag">Legal Research</span><span class="skill-tag">Arabic</span><span class="skill-tag">French</span></div>
+        <div class="profile-meta"><span>📍 Beirut</span><span class="badge-paid">Paid</span></div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar av-6">CM</div>
+          <div><div class="profile-name">Carla Moussa</div><div class="profile-major">Business Administration</div></div>
+          <div class="profile-gpa">GPA 3.4</div>
+        </div>
+        <div class="profile-skills"><span class="skill-tag">Finance</span><span class="skill-tag">Accounting</span><span class="skill-tag">SAP</span></div>
+        <div class="profile-meta"><span>📍 Remote</span><span class="badge-unpaid">Unpaid OK</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <div class="footer-logo">GradLink <span>USEK</span></div>
+      <p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p>
+    </div>
+    <div class="footer-links">
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('businesses')">Businesses</a>
+      <a onclick="showPage('contact')">Contact</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════ BUSINESSES PAGE ═══════════════════════ -->
+<div id="page-businesses" class="page">
+
+  <div class="page-hero biz-hero">
+    <div class="page-hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        For USEK Partner Businesses
+      </div>
+      <h1>Hire Lebanon's Brightest Graduates</h1>
+      <p>Access a vetted, searchable talent pool from one of Lebanon's leading universities. Post opportunities, search by major and skills, and build a pipeline of exceptional young professionals.</p>
+    </div>
+  </div>
+
+  <!-- Business sign-in + post opportunity -->
+  <section class="biz-section" style="background:var(--grey-light);">
+    <div class="biz-grid">
+
+      <!-- Sign in -->
+      <div class="auth-card">
+        <div class="card-title">Partner Business Login</div>
+        <div class="card-sub">Sign in with your registered business account.</div>
+        <div class="form-field">
+          <label class="form-label">Business Email</label>
+          <input class="form-input" type="email" placeholder="hr@yourbusiness.com"/>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" placeholder="Your password"/>
+        </div>
+        <button class="btn-full" onclick="showSuccess('biz-signin-success')">Sign In</button>
+        <div id="biz-signin-success" class="success-banner">✅ Signed in! You can now post opportunities and browse profiles.</div>
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--ice);">
+          <div style="font-size:0.85rem;color:var(--grey);margin-bottom:12px;">Not a partner yet?</div>
+          <button class="btn-full" style="background:var(--sky);" onclick="showPage('contact')">Apply to Partner with USEK →</button>
+        </div>
+      </div>
+
+      <!-- Post opportunity -->
+      <div class="auth-card">
+        <div class="card-title">Post an Opportunity</div>
+        <div class="card-sub">Create an opening visible to all matching USEK students.</div>
+        <div class="form-field">
+          <label class="form-label">Opportunity Title</label>
+          <input class="form-input" type="text" placeholder="e.g. Marketing Intern, Junior Developer…"/>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Type</label>
+            <select class="form-select">
+              <option>Internship</option>
+              <option>Full-time Job</option>
+              <option>Part-time Job</option>
+              <option>Project / Freelance</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Compensation</label>
+            <select class="form-select">
+              <option>Paid</option>
+              <option>Unpaid</option>
+              <option>Stipend</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Target Major(s)</label>
+            <select class="form-select">
+              <option>All Majors</option>
+              <option>Business Administration</option>
+              <option>Engineering</option>
+              <option>Computer Science</option>
+              <option>Law</option>
+              <option>Architecture</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Location</label>
+            <input class="form-input" type="text" placeholder="Beirut / Remote / Hybrid"/>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Description</label>
+          <textarea class="form-input" placeholder="Describe the role, responsibilities, requirements, and what the student will gain…"></textarea>
+        </div>
+        <button class="btn-full sky" onclick="showSuccess('post-success')">Publish Opportunity</button>
+        <div id="post-success" class="success-banner">✅ Opportunity published! Students can now view and apply.</div>
+      </div>
+    </div>
+
+    <!-- Search students -->
+    <div class="section-divider">
+      <hr/><span>Search & Filter Student Profiles</span><hr/>
+    </div>
+    <div class="students-filter">
+      <select class="form-select">
+        <option>All Majors</option>
+        <option>Business Administration</option>
+        <option>Computer Science</option>
+        <option>Engineering</option>
+        <option>Law</option>
+        <option>Architecture</option>
+      </select>
+      <select class="form-select">
+        <option>Min GPA — Any</option>
+        <option>3.0+</option>
+        <option>3.5+</option>
+        <option>3.75+</option>
+      </select>
+      <select class="form-select">
+        <option>Compensation — Any</option>
+        <option>Paid Only</option>
+        <option>Accepts Unpaid</option>
+      </select>
+      <select class="form-select">
+        <option>Location — Any</option>
+        <option>Beirut</option>
+        <option>Remote</option>
+        <option>Jounieh / Kaslik</option>
+      </select>
+    </div>
+    <div class="biz-profiles-grid">
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar av-2">JN</div>
+          <div><div class="profile-name">Joe Nasr</div><div class="profile-major">Computer Science</div></div>
+          <div class="profile-gpa">GPA 3.9</div>
+        </div>
+        <div class="profile-skills"><span class="skill-tag">Python</span><span class="skill-tag">React</span><span class="skill-tag">SQL</span></div>
+        <div class="profile-meta"><span>📍 Remote</span><span class="badge-paid">Paid</span></div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar av-1">SK</div>
+          <div><div class="profile-name">Sara Khoury</div><div class="profile-major">Business Administration</div></div>
+          <div class="profile-gpa">GPA 3.8</div>
+        </div>
+        <div class="profile-skills"><span class="skill-tag">Excel</span><span class="skill-tag">Marketing</span><span class="skill-tag">French</span></div>
+        <div class="profile-meta"><span>📍 Beirut</span><span class="badge-paid">Paid</span></div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar av-4">MF</div>
+          <div><div class="profile-name">Mark Frem</div><div class="profile-major">Engineering</div></div>
+          <div class="profile-gpa">GPA 3.7</div>
+        </div>
+        <div class="profile-skills"><span class="skill-tag">MATLAB</span><span class="skill-tag">AutoCAD</span><span class="skill-tag">C++</span></div>
+        <div class="profile-meta"><span>📍 Kaslik</span><span class="badge-paid">Paid</span></div>
+      </div>
+    </div>
+
+    <!-- Partner CTA -->
+    <div class="partner-cta">
+      <div>
+        <h3>Not Yet a USEK Partner?</h3>
+        <p>Join a growing network of 180+ businesses that have access to verified USEK talent. Contact our careers office to begin the partnership process — it's straightforward and cost-effective.</p>
+      </div>
+      <button class="btn-white-lg" onclick="showPage('contact')">Apply to Partner →</button>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <div class="footer-logo">GradLink <span>USEK</span></div>
+      <p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p>
+    </div>
+    <div class="footer-links">
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('students')">Students</a>
+      <a onclick="showPage('contact')">Contact</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════ CONTACT PAGE ═══════════════════════ -->
+<div id="page-contact" class="page">
+
+  <div class="page-hero" style="background:linear-gradient(130deg,#0D2B55 0%,#1A56A0 100%);">
+    <div class="page-hero-content">
+      <div class="hero-badge" style="margin-bottom:16px;">
+        <div class="hero-badge-dot"></div>
+        Get in Touch
+      </div>
+      <h1>We'd Love to Hear From You</h1>
+      <p>Whether you're a student with questions, a business looking to partner, or a faculty member seeking collaboration — reach out and we'll get back to you promptly.</p>
+    </div>
+  </div>
+
+  <section class="contact-section">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h2>Contact GradLink USEK</h2>
+        <p>Our team at the USEK Career Development Center manages the GradLink platform. We're here to support students, alumni, and partner businesses every step of the way.</p>
+        <div class="contact-methods">
+          <div class="contact-method">
+            <div class="contact-method-icon">📧</div>
+            <div>
+              <h4>Email</h4>
+              <p>gradlink@usek.edu.lb</p>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon">📞</div>
+            <div>
+              <h4>Phone</h4>
+              <p>+961 9 600 000 ext. 2400</p>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon">📍</div>
+            <div>
+              <h4>Campus Location</h4>
+              <p>Career Development Center, Main Building, USEK — Kaslik, Lebanon</p>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon">🕐</div>
+            <div>
+              <h4>Office Hours</h4>
+              <p>Mon – Fri: 8:00 AM – 4:00 PM</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <h3>Send Us a Message</h3>
+        <div class="form-sub">We typically respond within one business day.</div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">First Name</label>
+            <input class="form-input" type="text" placeholder="Your first name"/>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" type="text" placeholder="Your last name"/>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" type="email" placeholder="your@email.com"/>
+        </div>
+        <div class="form-field">
+          <label class="form-label">I am a…</label>
+          <div class="radio-group" id="who-group">
+            <label class="radio-opt" onclick="toggleRadio(this,'who-group')"><input type="radio" name="who" value="student">Student / Alumni</label>
+            <label class="radio-opt" onclick="toggleRadio(this,'who-group')"><input type="radio" name="who" value="biz">Business</label>
+            <label class="radio-opt" onclick="toggleRadio(this,'who-group')"><input type="radio" name="who" value="faculty">Faculty / Staff</label>
+            <label class="radio-opt" onclick="toggleRadio(this,'who-group')"><input type="radio" name="who" value="other">Other</label>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Subject</label>
+          <select class="form-select">
+            <option>General Inquiry</option>
+            <option>Business Partnership Application</option>
+            <option>Student / Alumni Support</option>
+            <option>Technical Issue</option>
+            <option>Media & Press</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Message</label>
+          <textarea class="form-input" style="min-height:130px;" placeholder="Tell us how we can help you…"></textarea>
+        </div>
+        <button class="btn-full" onclick="showSuccess('contact-success')">Send Message</button>
+        <div id="contact-success" class="success-banner">✅ Message sent! We'll get back to you within one business day.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <div class="footer-logo">GradLink <span>USEK</span></div>
+      <p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p>
+    </div>
+    <div class="footer-links">
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('students')">Students</a>
+      <a onclick="showPage('businesses')">Businesses</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    const navEl = document.getElementById('nav-' + name);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function switchTab(btn, tab) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-signin').style.display = tab === 'signin' ? '' : 'none';
+    document.getElementById('tab-register').style.display = tab === 'register' ? 'block' : 'none';
+  }
+
+  function showSuccess(id) {
+    const el = document.getElementById(id);
+    if (el) { el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 4000); }
+  }
+
+  function toggleRadio(label, groupId) {
+    document.querySelectorAll('#' + groupId + ' .radio-opt').forEach(l => l.classList.remove('checked'));
+    label.classList.add('checked');
+  }
+
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      const siblings = this.parentElement.querySelectorAll('.filter-chip');
+      siblings.forEach(s => s.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
