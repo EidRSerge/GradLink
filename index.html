@@ -872,9 +872,25 @@ async function signIn() {
     return showAlert(alertEl, 'error', '❌ This account is a business account. Please use the Business login.');
   }
 
+  await saveProfileIfPending(data.user, email);
   onSignedIn(data.user);
   showAlert(alertEl, 'success', '✅ Signed in! Redirecting to your dashboard…');
   setTimeout(() => showPage('dashboard'), 1200);
+}
+
+// ── SAVE PENDING PROFILE (after email confirmation) ───────────────
+async function saveProfileIfPending(user, email) {
+  const key = 'pendingProfile_' + email;
+  const pending = localStorage.getItem(key);
+  if (!pending) return;
+  try {
+    const profileData = JSON.parse(pending);
+    const { error: profileError } = await sb.from('profiles').upsert({ id: user.id, ...profileData });
+    if (profileError) { console.error('Profile save error:', profileError); return; }
+    const { error: roleError } = await sb.from('user_roles').insert({ id: user.id, role: 'student' });
+    if (roleError && roleError.code !== '23505') console.error('Role save error:', roleError);
+    localStorage.removeItem(key);
+  } catch(e) { console.error('Profile parse error:', e); }
 }
 
 // ── REGISTER ──────────────────────────────────────────────────────
@@ -907,14 +923,11 @@ async function register() {
   const { data, error } = await sb.auth.signUp({ email, password });
   if (error) { setLoading('register-btn', false); return showAlert(alertEl, 'error', '❌ ' + error.message); }
 
-  if (data.user) {
-    const { error: profileError } = await sb.from('profiles').upsert({ id: data.user.id, ...profileData });
-    if (profileError) console.error('Profile insert error:', profileError);
-    await sb.from('user_roles').insert({ id: data.user.id, role: 'student' });
-  }
+  // Save profile data to localStorage so we can insert it after email confirmation
+  localStorage.setItem('pendingProfile_' + email, JSON.stringify(profileData));
 
   setLoading('register-btn', false);
-  showAlert(alertEl, 'success', '✅ Profile created! Check your email to confirm, then sign in.');
+  showAlert(alertEl, 'success', '✅ Account created! Check your email, confirm it, then come back and sign in.');
   setTimeout(() => switchTab(document.getElementById('tab-btn-signin'), 'signin'), 2500);
 }
 
@@ -1203,13 +1216,16 @@ async function loadDashboard() {
     return;
   }
   appList.innerHTML = apps.map(a => `
-    <div class="app-card">
+    <div class="app-card" id="appcard-${a.id}">
       <div style="flex:1">
         <div style="font-weight:600;color:var(--navy);margin-bottom:4px">${a.opportunities?.title || 'Opportunity'}</div>
         <div style="font-size:0.82rem;color:var(--grey)">${a.opportunities?.company_name || ''} · ${a.opportunities?.location || ''}</div>
         <div style="font-size:0.78rem;color:var(--grey);margin-top:4px">Applied ${formatDate(a.created_at)}</div>
       </div>
-      <span class="app-status ${a.status}">${a.status.charAt(0).toUpperCase() + a.status.slice(1)}</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="app-status ${a.status}">${a.status.charAt(0).toUpperCase() + a.status.slice(1)}</span>
+        ${a.status === 'pending' ? `<button class="btn-reject" style="font-size:0.78rem;padding:4px 12px;" onclick="cancelApplication('${a.id}', this)">Cancel</button>` : ''}
+      </div>
     </div>
   `).join('');
 }
@@ -1244,9 +1260,10 @@ async function loadBizDashboard() {
   let profileMap = {};
   if (allApps && allApps.length > 0) {
     const studentIds = [...new Set(allApps.map(a => a.student_id))];
-    const { data: profileRows } = await sb.from('profiles')
+    const { data: profileRows, error: profileErr } = await sb.from('profiles')
       .select('id, first_name, last_name, major, gpa, skills, location')
       .in('id', studentIds);
+    if (profileErr) console.error('Profile fetch error:', profileErr);
     if (profileRows) profileRows.forEach(p => profileMap[p.id] = p);
   }
 
@@ -1272,11 +1289,19 @@ async function loadBizDashboard() {
             ? `<button class="btn-reject" disabled>Rejected</button>`
             : `<button class="btn-accept" onclick="updateApplicant('${a.id}','accepted',this)">Accept</button>
                <button class="btn-reject" onclick="updateApplicant('${a.id}','rejected',this)">Reject</button>`;
+          const displayName = (p.first_name || p.last_name)
+            ? `${p.first_name || ''} ${p.last_name || ''}`.trim()
+            : '(Profile not loaded)';
+          const displayMeta = [
+            p.major || '',
+            p.gpa ? 'GPA ' + parseFloat(p.gpa).toFixed(1) : '',
+            p.skills ? p.skills.split(',').slice(0,3).map(s => s.trim()).join(', ') : ''
+          ].filter(Boolean).join(' · ');
           return `
           <div class="applicant-row" id="approw-${a.id}">
             <div>
-              <div class="applicant-name">${p.first_name || ''} ${p.last_name || ''}</div>
-              <div class="applicant-major">${p.major || ''}${p.gpa ? ' · GPA ' + parseFloat(p.gpa).toFixed(1) : ''}${p.skills ? ' · ' + p.skills.split(',').slice(0,3).join(', ') : ''}</div>
+              <div class="applicant-name">${displayName}</div>
+              <div class="applicant-major">${displayMeta || 'No profile details'}</div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
               <span class="app-status ${statusClass}" id="appstatus-${a.id}">${statusLabel}</span>
@@ -1287,12 +1312,13 @@ async function loadBizDashboard() {
       : '<div style="font-size:0.85rem;color:var(--grey);padding:8px 0;">No applicants yet.</div>';
 
     html += `
-      <div class="biz-opp-card">
+      <div class="biz-opp-card" id="oppcard-${opp.id}">
         <div class="biz-opp-header">
           <div class="biz-opp-title">${opp.title}</div>
           <div style="display:flex;align-items:center;gap:10px;">
             <span style="font-size:0.8rem;color:var(--grey)">${apps.length} applicant${apps.length !== 1 ? 's' : ''}</span>
             <span class="badge-posted">Posted</span>
+            <button class="btn-reject" style="font-size:0.78rem;padding:4px 12px;" onclick="deleteOpportunity('${opp.id}', this)">Delete</button>
           </div>
         </div>
         <div class="biz-opp-meta">${opp.company_name || ''} · ${opp.type} · ${opp.location || ''} ${opp.deadline ? '· Deadline: ' + formatDate(opp.deadline) : ''}</div>
@@ -1311,18 +1337,48 @@ async function updateApplicant(appId, newStatus, btn) {
     alert('Failed to update: ' + error.message);
     return;
   }
+  // Update the badge
   const badge = document.getElementById('appstatus-' + appId);
   if (badge) {
     badge.className = 'app-status ' + newStatus;
     badge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
   }
-  // Replace action buttons with final state
-  const btnArea = row.querySelector('div[style]');
-  if (newStatus === 'accepted') {
-    btnArea.innerHTML = `<span class="app-status accepted">Accepted</span><button class="btn-accept" disabled>Accepted ✓</button>`;
-  } else {
-    btnArea.innerHTML = `<span class="app-status rejected">Rejected</span><button class="btn-reject" disabled>Rejected</button>`;
+  // Remove all action buttons from the row, leave the badge in place
+  row.querySelectorAll('button').forEach(b => b.remove());
+}
+
+// ── CANCEL APPLICATION (student) ─────────────────────────────────
+async function cancelApplication(appId, btn) {
+  if (!confirm('Cancel this application?')) return;
+  btn.disabled = true;
+  const { error } = await sb.from('applications').delete().eq('id', appId);
+  if (error) {
+    btn.disabled = false;
+    alert('Failed to cancel: ' + error.message);
+    return;
   }
+  const card = document.getElementById('appcard-' + appId);
+  if (card) card.remove();
+  // Re-enable the apply button on the opportunities list if visible
+  const applyBtn = document.querySelector(`[id^="apply-"]`);
+  loadDashboard();
+}
+
+// ── DELETE OPPORTUNITY (business) ────────────────────────────────
+async function deleteOpportunity(oppId, btn) {
+  if (!confirm('Delete this opportunity? This will also remove all applications for it.')) return;
+  btn.disabled = true;
+  // Delete applications first (foreign key), then the opportunity
+  await sb.from('applications').delete().eq('opportunity_id', oppId);
+  const { error } = await sb.from('opportunities').delete().eq('id', oppId);
+  if (error) {
+    btn.disabled = false;
+    alert('Failed to delete: ' + error.message);
+    return;
+  }
+  const card = document.getElementById('oppcard-' + oppId);
+  if (card) card.remove();
+  loadOpportunities();
 }
 
 // ── CONTACT FORM ─────────────────────────────────────────────────
