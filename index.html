@@ -262,6 +262,7 @@
   .app-status.pending { background: rgba(232,160,32,0.15); color: #B7800A; }
   .app-status.reviewed { background: rgba(59,130,196,0.15); color: var(--blue); }
   .app-status.accepted { background: rgba(46,125,82,0.12); color: #2E7D52; }
+  .app-status.rejected { background: rgba(192,57,43,0.1); color: var(--red); }
 
   /* BUSINESS DASHBOARD */
   .biz-dash-opps { display: flex; flex-direction: column; gap: 14px; }
@@ -276,6 +277,9 @@
   .btn-accept { padding: 5px 14px; background: var(--green); color: var(--white); border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
   .btn-accept:hover { background: #1a5c38; }
   .btn-accept:disabled { opacity: 0.6; cursor: default; }
+  .btn-reject { padding: 5px 14px; background: var(--red); color: var(--white); border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn-reject:hover { background: #a93226; }
+  .btn-reject:disabled { opacity: 0.6; cursor: default; }
   .badge-posted { background: rgba(46,125,82,0.12); color: #2E7D52; border-radius: 100px; padding: 4px 12px; font-size: 0.72rem; font-weight: 600; }
 
   /* EMPTY STATE */
@@ -1227,36 +1231,69 @@ async function loadBizDashboard() {
     return;
   }
 
-  // For each opp, load applicants
+  // Fetch ALL applications for this business's opportunities in one query.
+  // We fetch applications and profiles separately to avoid RLS join issues.
+  const oppIds = opps.map(o => o.id);
+
+  const { data: allApps } = await sb.from('applications')
+    .select('*')
+    .in('opportunity_id', oppIds)
+    .order('created_at', { ascending: false });
+
+  // Fetch profiles for all applicants
+  let profileMap = {};
+  if (allApps && allApps.length > 0) {
+    const studentIds = [...new Set(allApps.map(a => a.student_id))];
+    const { data: profileRows } = await sb.from('profiles')
+      .select('id, first_name, last_name, major, gpa, skills, location')
+      .in('id', studentIds);
+    if (profileRows) profileRows.forEach(p => profileMap[p.id] = p);
+  }
+
+  // Group applications by opportunity_id
+  const appsByOpp = {};
+  if (allApps) allApps.forEach(a => {
+    if (!appsByOpp[a.opportunity_id]) appsByOpp[a.opportunity_id] = [];
+    appsByOpp[a.opportunity_id].push(a);
+  });
+
   let html = '';
   for (const opp of opps) {
-    const { data: apps } = await sb.from('applications')
-      .select('*, profiles(first_name, last_name, major, gpa)')
-      .eq('opportunity_id', opp.id)
-      .order('created_at', { ascending: false });
+    const apps = appsByOpp[opp.id] || [];
 
-    const applicantRows = apps && apps.length > 0
-      ? apps.map(a => `
-          <div class="applicant-row">
+    const applicantRows = apps.length > 0
+      ? apps.map(a => {
+          const p = profileMap[a.student_id] || {};
+          const statusClass = a.status === 'accepted' ? 'accepted' : a.status === 'rejected' ? 'rejected' : 'pending';
+          const statusLabel = a.status.charAt(0).toUpperCase() + a.status.slice(1);
+          const actionBtns = a.status === 'accepted'
+            ? `<button class="btn-accept" disabled>Accepted ✓</button>`
+            : a.status === 'rejected'
+            ? `<button class="btn-reject" disabled>Rejected</button>`
+            : `<button class="btn-accept" onclick="updateApplicant('${a.id}','accepted',this)">Accept</button>
+               <button class="btn-reject" onclick="updateApplicant('${a.id}','rejected',this)">Reject</button>`;
+          return `
+          <div class="applicant-row" id="approw-${a.id}">
             <div>
-              <div class="applicant-name">${a.profiles?.first_name || ''} ${a.profiles?.last_name || ''}</div>
-              <div class="applicant-major">${a.profiles?.major || ''}${a.profiles?.gpa ? ' · GPA ' + parseFloat(a.profiles.gpa).toFixed(1) : ''}</div>
+              <div class="applicant-name">${p.first_name || ''} ${p.last_name || ''}</div>
+              <div class="applicant-major">${p.major || ''}${p.gpa ? ' · GPA ' + parseFloat(p.gpa).toFixed(1) : ''}${p.skills ? ' · ' + p.skills.split(',').slice(0,3).join(', ') : ''}</div>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <span class="app-status ${a.status}">${a.status.charAt(0).toUpperCase() + a.status.slice(1)}</span>
-              ${a.status !== 'accepted'
-                ? `<button class="btn-accept" onclick="acceptApplicant('${a.id}', this)">Accept</button>`
-                : `<button class="btn-accept" disabled>Accepted ✓</button>`}
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="app-status ${statusClass}" id="appstatus-${a.id}">${statusLabel}</span>
+              ${actionBtns}
             </div>
-          </div>`)
-        .join('')
+          </div>`;
+        }).join('')
       : '<div style="font-size:0.85rem;color:var(--grey);padding:8px 0;">No applicants yet.</div>';
 
     html += `
       <div class="biz-opp-card">
         <div class="biz-opp-header">
           <div class="biz-opp-title">${opp.title}</div>
-          <span class="badge-posted">Posted</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:0.8rem;color:var(--grey)">${apps.length} applicant${apps.length !== 1 ? 's' : ''}</span>
+            <span class="badge-posted">Posted</span>
+          </div>
         </div>
         <div class="biz-opp-meta">${opp.company_name || ''} · ${opp.type} · ${opp.location || ''} ${opp.deadline ? '· Deadline: ' + formatDate(opp.deadline) : ''}</div>
         <div class="biz-applicants">${applicantRows}</div>
@@ -1265,19 +1302,27 @@ async function loadBizDashboard() {
   container.innerHTML = html;
 }
 
-async function acceptApplicant(appId, btn) {
-  btn.disabled = true; btn.textContent = '…';
-  const { error } = await sb.from('applications').update({ status: 'accepted' }).eq('id', appId);
+async function updateApplicant(appId, newStatus, btn) {
+  const row = btn.closest('.applicant-row');
+  row.querySelectorAll('button').forEach(b => b.disabled = true);
+  const { error } = await sb.from('applications').update({ status: newStatus }).eq('id', appId);
   if (error) {
-    btn.disabled = false; btn.textContent = 'Accept';
-    alert('Failed to accept: ' + error.message);
+    row.querySelectorAll('button').forEach(b => b.disabled = false);
+    alert('Failed to update: ' + error.message);
     return;
   }
-  btn.textContent = 'Accepted ✓';
-  // Update status badge in the row
-  const row = btn.closest('.applicant-row');
-  const badge = row.querySelector('.app-status');
-  if (badge) { badge.className = 'app-status accepted'; badge.textContent = 'Accepted'; }
+  const badge = document.getElementById('appstatus-' + appId);
+  if (badge) {
+    badge.className = 'app-status ' + newStatus;
+    badge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+  }
+  // Replace action buttons with final state
+  const btnArea = row.querySelector('div[style]');
+  if (newStatus === 'accepted') {
+    btnArea.innerHTML = `<span class="app-status accepted">Accepted</span><button class="btn-accept" disabled>Accepted ✓</button>`;
+  } else {
+    btnArea.innerHTML = `<span class="app-status rejected">Rejected</span><button class="btn-reject" disabled>Rejected</button>`;
+  }
 }
 
 // ── CONTACT FORM ─────────────────────────────────────────────────
