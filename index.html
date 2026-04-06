@@ -1250,7 +1250,7 @@ function getSampleProfiles() {
   ];
 }
 
-function renderSampleOpps() { return renderOppsHTML(getSampleOppsData()); }
+function renderSampleOpps() { allOpps = getSampleOppsData(); renderOpportunities(allOpps); }
 function loadSampleOpportunities() { allOpps = getSampleOppsData(); renderOpportunities(allOpps); }
 function loadSampleProfiles(gridId) { renderProfiles(getSampleProfiles(), gridId); allProfiles = getSampleProfiles(); }
 
@@ -1290,5 +1290,17 @@ function setLoading(btnId, loading) {
   else btn.innerHTML = btn.getAttribute('data-label') || btn.textContent.replace('Please wait…','').trim() || 'Submit';
 }
 
-// Save original labels before any loading state
-document.querySelectorAll('[id$="-btn"]').forEach(btn => btn.setAttribute('data-label',
+
+// Save original button labels on load
+document.querySelectorAll('[id$="-btn"]').forEach(btn => btn.setAttribute('data-label', btn.textContent.trim()));
+
+// ── FORMAT DATE ───────────────────────────────────────────────────
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+</script>
+</body>
+</html>
