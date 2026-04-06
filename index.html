@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>GradLink USEK – Bridging Talent & Opportunity</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<!-- Supabase JS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
@@ -21,13 +20,12 @@
     --red:    #C0392B;
     --green:  #2E7D52;
   }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body { font-family: 'DM Sans', sans-serif; color: var(--navy); background: var(--white); overflow-x: hidden; }
   h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; }
 
-  /* ── NAV ── */
+  /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
@@ -48,11 +46,11 @@
   .nav-cta { background: var(--navy) !important; color: var(--white) !important; border-radius: 8px !important; }
   .nav-cta:hover { background: var(--blue) !important; }
 
-  /* ── PAGES ── */
+  /* PAGES */
   .page { display: none; min-height: 100vh; padding-top: 68px; }
   .page.active { display: block; }
 
-  /* ── HERO ── */
+  /* HERO */
   .hero {
     position: relative; min-height: calc(100vh - 68px);
     display: flex; align-items: center;
@@ -123,7 +121,7 @@
   .partner-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--grey); opacity: 0.5; letter-spacing: 0.05em; transition: opacity 0.2s; }
   .partner-logo:hover { opacity: 0.9; }
 
-  /* ── PAGE HERO ── */
+  /* PAGE HERO */
   .page-hero { background: linear-gradient(130deg, var(--navy) 0%, var(--blue) 100%); padding: 80px 80px 64px; position: relative; overflow: hidden; }
   .page-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; border-radius: 50%; background: rgba(59,130,196,0.2); }
   .page-hero-content { position: relative; z-index: 2; max-width: 600px; }
@@ -131,7 +129,7 @@
   .page-hero h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); color: var(--white); font-weight: 700; line-height: 1.15; margin-bottom: 16px; }
   .page-hero p { font-size: 1.05rem; color: rgba(214,232,247,0.85); line-height: 1.7; }
 
-  /* ── AUTH ── */
+  /* AUTH */
   .auth-section { padding: 64px 80px; background: var(--grey-light); }
   .auth-tabs { display: flex; gap: 0; background: var(--white); border: 1px solid var(--ice); border-radius: 12px; padding: 6px; width: fit-content; margin-bottom: 40px; }
   .auth-tab { padding: 10px 28px; border: none; background: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; color: var(--grey); cursor: pointer; transition: all 0.2s; }
@@ -141,7 +139,7 @@
   .card-title { font-size: 1.35rem; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
   .card-sub { font-size: 0.875rem; color: var(--grey); margin-bottom: 24px; }
 
-  /* ── FORMS ── */
+  /* FORMS */
   .form-field { margin-bottom: 18px; }
   .form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--grey-dark); margin-bottom: 6px; letter-spacing: 0.03em; }
   .form-input, .form-select { width: 100%; padding: 11px 14px; border: 1.5px solid #DDE3EC; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--navy); background: var(--white); transition: border-color 0.2s; outline: none; }
@@ -163,18 +161,18 @@
   .radio-opt input { display: none; }
   .radio-opt.checked { border-color: var(--navy); color: var(--navy); background: var(--ice); }
 
-  /* ── ALERTS ── */
+  /* ALERTS */
   .alert { display: none; padding: 14px 18px; border-radius: 10px; font-size: 0.875rem; margin-top: 16px; align-items: center; gap: 8px; }
   .alert.show { display: flex; }
   .alert.success { background: rgba(46,125,82,0.1); border: 1px solid rgba(46,125,82,0.3); color: #2E7D52; }
   .alert.error { background: rgba(192,57,43,0.1); border: 1px solid rgba(192,57,43,0.3); color: var(--red); }
   .alert.info { background: var(--ice); border: 1px solid rgba(59,130,196,0.3); color: var(--navy); }
 
-  /* ── SPINNER ── */
+  /* SPINNER */
   .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── OPPORTUNITIES ── */
+  /* OPPORTUNITIES */
   .opportunities { padding: 64px 80px; background: var(--grey-light); }
   .opp-grid { display: flex; flex-direction: column; gap: 14px; }
   .opp-card { background: var(--white); border-radius: 14px; padding: 20px 24px; border: 1px solid rgba(13,43,85,0.08); display: flex; align-items: center; gap: 20px; transition: box-shadow 0.2s; }
@@ -191,13 +189,14 @@
   .apply-btn:hover { background: var(--blue); }
   .apply-btn.applied { background: var(--green); cursor: default; }
   .apply-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .apply-btn.na-btn { background: var(--grey); cursor: default; }
 
-  /* ── FILTER BAR ── */
+  /* FILTER BAR */
   .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
   .filter-chip { padding: 8px 20px; border-radius: 100px; border: 1.5px solid #DDE3EC; background: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--grey-dark); cursor: pointer; transition: all 0.2s; }
   .filter-chip.active, .filter-chip:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
 
-  /* ── PROFILE CARDS ── */
+  /* PROFILE CARDS */
   .students-showcase { padding: 64px 80px; }
   .showcase-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
   .profiles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -215,7 +214,7 @@
   .badge-paid { background: rgba(46,125,82,0.12); color: #2E7D52; border-radius: 100px; padding: 3px 10px; font-size: 0.72rem; font-weight: 600; }
   .badge-unpaid { background: rgba(232,160,32,0.15); color: #B7800A; border-radius: 100px; padding: 3px 10px; font-size: 0.72rem; font-weight: 600; }
 
-  /* ── BUSINESSES ── */
+  /* BUSINESSES */
   .biz-hero { background: linear-gradient(130deg, var(--sky) 0%, var(--blue) 100%); }
   .biz-section { padding: 64px 80px; }
   .biz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
@@ -230,7 +229,7 @@
   .partner-cta .btn-white-lg { padding: 15px 36px; background: var(--white); color: var(--navy); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; }
   .partner-cta .btn-white-lg:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
 
-  /* ── CONTACT ── */
+  /* CONTACT */
   .contact-section { padding: 80px 80px; }
   .contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: start; }
   .contact-info h2 { font-size: 2.4rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; }
@@ -244,7 +243,7 @@
   .contact-form h3 { font-size: 1.5rem; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
   .contact-form .form-sub { font-size: 0.875rem; color: var(--grey); margin-bottom: 28px; }
 
-  /* ── DASHBOARD ── */
+  /* DASHBOARD */
   .dashboard { padding: 64px 80px; }
   .dashboard-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; }
   .dashboard-header h2 { font-size: 2rem; font-weight: 700; color: var(--navy); }
@@ -264,15 +263,30 @@
   .app-status.reviewed { background: rgba(59,130,196,0.15); color: var(--blue); }
   .app-status.accepted { background: rgba(46,125,82,0.12); color: #2E7D52; }
 
-  /* ── EMPTY STATE ── */
+  /* BUSINESS DASHBOARD */
+  .biz-dash-opps { display: flex; flex-direction: column; gap: 14px; }
+  .biz-opp-card { background: var(--white); border-radius: 14px; padding: 20px 24px; border: 1px solid rgba(13,43,85,0.08); }
+  .biz-opp-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .biz-opp-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--navy); }
+  .biz-opp-meta { font-size: 0.82rem; color: var(--grey); margin-bottom: 10px; }
+  .biz-applicants { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .applicant-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--grey-light); border-radius: 8px; font-size: 0.85rem; }
+  .applicant-name { font-weight: 600; color: var(--navy); }
+  .applicant-major { color: var(--grey); font-size: 0.8rem; }
+  .btn-accept { padding: 5px 14px; background: var(--green); color: var(--white); border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn-accept:hover { background: #1a5c38; }
+  .btn-accept:disabled { opacity: 0.6; cursor: default; }
+  .badge-posted { background: rgba(46,125,82,0.12); color: #2E7D52; border-radius: 100px; padding: 4px 12px; font-size: 0.72rem; font-weight: 600; }
+
+  /* EMPTY STATE */
   .empty-state { text-align: center; padding: 60px 20px; color: var(--grey); }
   .empty-state .empty-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.5; }
   .empty-state p { font-size: 0.95rem; line-height: 1.6; }
 
-  /* ── LOADING ── */
+  /* LOADING */
   .loading-state { text-align: center; padding: 40px; color: var(--grey); font-size: 0.9rem; }
 
-  /* ── FOOTER ── */
+  /* FOOTER */
   footer { background: var(--navy); padding: 48px 80px; display: flex; justify-content: space-between; align-items: center; }
   footer .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 700; color: var(--white); }
   footer .footer-logo span { color: var(--sky); }
@@ -281,12 +295,6 @@
   footer .footer-links a { font-size: 0.85rem; color: rgba(255,255,255,0.55); text-decoration: none; cursor: pointer; transition: color 0.2s; }
   footer .footer-links a:hover { color: var(--white); }
   .divider { height: 1px; background: var(--ice); }
-
-  /* ── CONFIG BANNER ── */
-  .config-banner { background: #FFF3CD; border: 1px solid #FFEEBA; padding: 16px 24px; font-size: 0.875rem; color: #856404; display: flex; align-items: center; gap: 12px; position: fixed; top: 68px; left: 0; right: 0; z-index: 99; }
-  .config-banner a { color: var(--blue); font-weight: 600; }
-  .config-banner .close-banner { margin-left: auto; cursor: pointer; font-size: 1.2rem; opacity: 0.6; }
-  .config-banner .close-banner:hover { opacity: 1; }
 
   @media (max-width: 900px) {
     nav { padding: 0 24px; }
@@ -305,13 +313,7 @@
 </head>
 <body>
 
-<!-- ══════════════════ CONFIG BANNER (shown until Supabase is set up) ══════════════════ -->
-<div class="config-banner" id="config-banner">
-  ⚙️ <strong>Setup required:</strong> Replace <code>YOUR_SUPABASE_URL</code> and <code>YOUR_SUPABASE_ANON_KEY</code> in the script below with your project credentials from <a href="https://supabase.com/dashboard" target="_blank">supabase.com/dashboard</a>. See the SQL setup comment in the source.
-  <span class="close-banner" onclick="document.getElementById('config-banner').style.display='none'">✕</span>
-</div>
-
-<!-- ══════════════════ NAV ══════════════════ -->
+<!-- NAV -->
 <nav>
   <a class="nav-logo" onclick="showPage('home')">
     <div class="nav-logo-mark">
@@ -325,12 +327,13 @@
     <a onclick="showPage('businesses')" id="nav-businesses">Businesses</a>
     <a onclick="showPage('contact')" id="nav-contact">Contact</a>
     <a id="nav-dashboard" onclick="showPage('dashboard')" style="display:none">My Dashboard</a>
+    <a id="nav-biz-dashboard" onclick="showPage('biz-dashboard')" style="display:none">Business Dashboard</a>
     <a id="nav-signout" onclick="signOut()" style="display:none;background:var(--red)!important;color:white!important;border-radius:8px!important;">Sign Out</a>
     <a onclick="showPage('students')" class="nav-cta" id="nav-getstarted">Get Started</a>
   </div>
 </nav>
 
-<!-- ══════════════════ HOME PAGE ══════════════════ -->
+<!-- HOME PAGE -->
 <div id="page-home" class="page active">
   <section class="hero">
     <div class="hero-bg-pattern"></div>
@@ -345,9 +348,24 @@
       </div>
     </div>
     <div class="hero-visual">
-      <div class="hero-card"><div class="hero-card-label">New Opportunity</div><div class="hero-card-title">Junior Marketing Analyst</div><div class="hero-card-sub">Deloitte Lebanon · Beirut CBD</div><div class="hero-card-tags"><span class="tag">Full-time</span><span class="tag accent">Paid</span><span class="tag">Marketing</span></div></div>
-      <div class="hero-card"><div class="hero-card-label">Student Profile</div><div class="hero-card-title">Sara K. — Engineering</div><div class="hero-card-sub">GPA 3.8 · Available immediately</div><div class="hero-card-tags"><span class="tag">Python</span><span class="tag">AutoCAD</span><span class="tag">Beirut</span></div></div>
-      <div class="hero-card"><div class="hero-card-label">Internship Match</div><div class="hero-card-title">Finance Intern — BankMed</div><div class="hero-card-sub">3 months · Hybrid · Paid</div><div class="hero-card-tags"><span class="tag">Finance</span><span class="tag">Summer 2025</span></div></div>
+      <div class="hero-card">
+        <div class="hero-card-label">New Opportunity</div>
+        <div class="hero-card-title">Junior Legal Associate</div>
+        <div class="hero-card-sub">Badri & Salim El Meouchi · Beirut CBD</div>
+        <div class="hero-card-tags"><span class="tag">Full-time</span><span class="tag accent">Paid</span><span class="tag">Law</span></div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">Student Profile</div>
+        <div class="hero-card-title">Serge E. — Law</div>
+        <div class="hero-card-sub">GPA 3.X · Available immediately</div>
+        <div class="hero-card-tags"><span class="tag">Public Speaking</span><span class="tag">Legal Research</span><span class="tag">Jounieh</span></div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">Internship Match</div>
+        <div class="hero-card-title">Legal Research Intern — BankMed</div>
+        <div class="hero-card-sub">3 months · Beirut · Paid</div>
+        <div class="hero-card-tags"><span class="tag">Law</span><span class="tag">Summer 2025</span></div>
+      </div>
     </div>
   </section>
   <div class="stats-bar">
@@ -384,7 +402,7 @@
   <footer><div><div class="footer-logo">GradLink <span>USEK</span></div><p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p></div><div class="footer-links"><a onclick="showPage('students')">Students</a><a onclick="showPage('businesses')">Businesses</a><a onclick="showPage('contact')">Contact</a><a href="https://www.usek.edu.lb" target="_blank">USEK.edu.lb</a></div></footer>
 </div>
 
-<!-- ══════════════════ STUDENTS PAGE ══════════════════ -->
+<!-- STUDENTS PAGE -->
 <div id="page-students" class="page">
   <div class="page-hero">
     <div class="page-hero-content">
@@ -401,11 +419,10 @@
       <button class="auth-tab" id="tab-btn-register" onclick="switchTab(this,'register')">Create Profile</button>
     </div>
     <div class="auth-grid">
-      <!-- Sign In -->
       <div id="tab-signin" class="auth-card">
         <div class="card-title">Welcome Back</div>
         <div class="card-sub">Sign in with your USEK university email.</div>
-        <div class="info-note"><span class="info-note-icon">ℹ️</span>Only <strong>@net.usek.edu.lb</strong> email addresses are accepted.</div>
+        <div class="info-note"><span class="info-note-icon">ℹ️</span>Only <strong>@students.usek.edu.lb</strong> or <strong>@usek.edu.lb</strong> email addresses are accepted.</div>
         <div class="form-field">
           <label class="form-label">University Email</label>
           <input class="form-input" type="email" id="signin-email" placeholder="firstname.lastname@students.usek.edu.lb"/>
@@ -418,7 +435,6 @@
         <div id="signin-alert" class="alert"></div>
         <div style="margin-top:16px;text-align:center;font-size:0.82rem;color:var(--grey);">Forgot your password? <a href="#" onclick="resetPassword()" style="color:var(--sky);text-decoration:none;font-weight:600;">Reset it</a></div>
       </div>
-      <!-- What you get -->
       <div class="card">
         <div class="card-title">What You Unlock</div>
         <div class="card-sub">A profile on GradLink USEK gives you access to:</div>
@@ -437,10 +453,10 @@
         <div class="card-title">Create Your Profile</div>
         <div class="card-sub">Fill in your details to be discovered by partner businesses.</div>
         <div class="form-row">
-          <div class="form-field"><label class="form-label">First Name</label><input class="form-input" type="text" id="reg-firstname" placeholder="Sara"/></div>
-          <div class="form-field"><label class="form-label">Last Name</label><input class="form-input" type="text" id="reg-lastname" placeholder="Khoury"/></div>
+          <div class="form-field"><label class="form-label">First Name</label><input class="form-input" type="text" id="reg-firstname" placeholder="Serge"/></div>
+          <div class="form-field"><label class="form-label">Last Name</label><input class="form-input" type="text" id="reg-lastname" placeholder="Eid"/></div>
         </div>
-        <div class="form-field"><label class="form-label">University Email</label><input class="form-input" type="email" id="reg-email" placeholder="sara.khoury@students.usek.edu.lb"/></div>
+        <div class="form-field"><label class="form-label">University Email</label><input class="form-input" type="email" id="reg-email" placeholder="serge.eid@students.usek.edu.lb"/></div>
         <div class="form-row">
           <div class="form-field"><label class="form-label">Password (min. 6 characters)</label><input class="form-input" type="password" id="reg-password" placeholder="Choose a secure password"/></div>
           <div class="form-field"><label class="form-label">Confirm Password</label><input class="form-input" type="password" id="reg-confirm-password" placeholder="Repeat your password"/></div>
@@ -451,7 +467,7 @@
             <select class="form-select" id="reg-major">
               <option>Business Administration</option><option>Engineering</option><option>Computer Science</option>
               <option>Medicine & Medical Sciences</option><option>Arts & Social Sciences</option>
-              <option>Law & Political Science</option><option>Architecture & Design</option><option>Sciences</option>
+              <option selected>Law & Political Science</option><option>Architecture & Design</option><option>Sciences</option>
             </select>
           </div>
           <div class="form-field"><label class="form-label">GPA (out of 4.0)</label><input class="form-input" type="text" id="reg-gpa" placeholder="e.g. 3.75"/></div>
@@ -471,7 +487,7 @@
             </select>
           </div>
         </div>
-        <div class="form-field"><label class="form-label">Skills (comma-separated)</label><input class="form-input" type="text" id="reg-skills" placeholder="e.g. Python, Excel, Photoshop, Public Speaking"/></div>
+        <div class="form-field"><label class="form-label">Skills (comma-separated)</label><input class="form-input" type="text" id="reg-skills" placeholder="e.g. Legal Research, Public Speaking, Arabic, French"/></div>
         <div class="form-field">
           <label class="form-label">Preferred Opportunity Type</label>
           <div class="radio-group" id="opp-type-group">
@@ -536,7 +552,7 @@
   <footer><div><div class="footer-logo">GradLink <span>USEK</span></div><p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p></div><div class="footer-links"><a onclick="showPage('home')">Home</a><a onclick="showPage('businesses')">Businesses</a><a onclick="showPage('contact')">Contact</a></div></footer>
 </div>
 
-<!-- ══════════════════ DASHBOARD PAGE ══════════════════ -->
+<!-- STUDENT DASHBOARD PAGE -->
 <div id="page-dashboard" class="page">
   <div class="page-hero" style="background:linear-gradient(130deg,#0D2B55 0%,#1A56A0 100%);">
     <div class="page-hero-content">
@@ -547,7 +563,6 @@
   </div>
   <div class="dashboard">
     <div class="dashboard-grid">
-      <!-- Profile Summary -->
       <div class="profile-summary">
         <div class="profile-avatar-lg" id="dash-avatar">?</div>
         <h3 id="dash-name">Loading…</h3>
@@ -555,7 +570,6 @@
         <div id="dash-stats"></div>
         <button class="btn-full" style="margin-top:20px;font-size:0.85rem;" onclick="showPage('students')">Browse Opportunities</button>
       </div>
-      <!-- Applications -->
       <div>
         <h3 style="font-size:1.5rem;font-weight:700;color:var(--navy);margin-bottom:24px;">My Applications</h3>
         <div id="applications-list" class="applications-list">
@@ -567,7 +581,7 @@
   <footer><div><div class="footer-logo">GradLink <span>USEK</span></div><p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p></div><div class="footer-links"><a onclick="showPage('home')">Home</a><a onclick="showPage('students')">Opportunities</a><a onclick="signOut()">Sign Out</a></div></footer>
 </div>
 
-<!-- ══════════════════ BUSINESSES PAGE ══════════════════ -->
+<!-- BUSINESSES PAGE -->
 <div id="page-businesses" class="page">
   <div class="page-hero biz-hero">
     <div class="page-hero-content">
@@ -599,10 +613,8 @@
         <div class="card-sub">Create an opening visible to all matching USEK students.</div>
         <div class="info-note" id="post-login-notice"><span class="info-note-icon">🔒</span>Sign in as a partner business to post opportunities.</div>
         <div id="post-form">
-          <div class="form-row">
-            <div class="form-field"><label class="form-label">Company Name</label><input class="form-input" type="text" id="post-company" placeholder="e.g. Deloitte Lebanon, BankMed…" disabled/></div>
-            <div class="form-field"><label class="form-label">Opportunity Title</label><input class="form-input" type="text" id="post-title" placeholder="e.g. Marketing Intern, Junior Developer…" disabled/></div>
-          </div>
+          <div class="form-field"><label class="form-label">Business / Company Name</label><input class="form-input" type="text" id="post-company" placeholder="e.g. BankMed, Deloitte Lebanon…" disabled/></div>
+          <div class="form-field"><label class="form-label">Opportunity Title</label><input class="form-input" type="text" id="post-title" placeholder="e.g. Legal Research Intern, Junior Associate…" disabled/></div>
           <div class="form-row">
             <div class="form-field">
               <label class="form-label">Type</label>
@@ -665,7 +677,25 @@
   <footer><div><div class="footer-logo">GradLink <span>USEK</span></div><p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p></div><div class="footer-links"><a onclick="showPage('home')">Home</a><a onclick="showPage('students')">Students</a><a onclick="showPage('contact')">Contact</a></div></footer>
 </div>
 
-<!-- ══════════════════ CONTACT PAGE ══════════════════ -->
+<!-- BUSINESS DASHBOARD PAGE -->
+<div id="page-biz-dashboard" class="page">
+  <div class="page-hero" style="background:linear-gradient(130deg,#1A56A0 0%,#3B82C4 100%);">
+    <div class="page-hero-content">
+      <div class="hero-badge"><div class="hero-badge-dot"></div>Business Dashboard</div>
+      <h1 id="biz-dash-greeting">Welcome back!</h1>
+      <p>Manage your posted opportunities and review student applications.</p>
+    </div>
+  </div>
+  <div class="dashboard" style="max-width:960px;margin:0 auto;">
+    <h3 style="font-size:1.5rem;font-weight:700;color:var(--navy);margin-bottom:24px;">Your Posted Opportunities</h3>
+    <div id="biz-dash-opps" class="biz-dash-opps">
+      <div class="loading-state">Loading your opportunities…</div>
+    </div>
+  </div>
+  <footer><div><div class="footer-logo">GradLink <span>USEK</span></div><p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p></div><div class="footer-links"><a onclick="showPage('home')">Home</a><a onclick="showPage('businesses')">Post Opportunity</a><a onclick="signOut()">Sign Out</a></div></footer>
+</div>
+
+<!-- CONTACT PAGE -->
 <div id="page-contact" class="page">
   <div class="page-hero" style="background:linear-gradient(130deg,#0D2B55 0%,#1A56A0 100%);">
     <div class="page-hero-content">
@@ -680,7 +710,7 @@
         <h2>Contact GradLink USEK</h2>
         <p>Our team at the USEK Career Development Center manages the GradLink platform. We're here to support students, alumni, and partner businesses every step of the way.</p>
         <div class="contact-methods">
-          <div class="contact-method"><div class="contact-method-icon">📧</div><div><h4>Email</h4><p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="680f1a090c04010603281d1b0d03460d0c1d46040a">[email&#160;protected]</a></p></div></div>
+          <div class="contact-method"><div class="contact-method-icon">📧</div><div><h4>Email</h4><p>gradlink@usek.edu.lb</p></div></div>
           <div class="contact-method"><div class="contact-method-icon">📞</div><div><h4>Phone</h4><p>+961 9 600 000 ext. 2400</p></div></div>
           <div class="contact-method"><div class="contact-method-icon">📍</div><div><h4>Campus Location</h4><p>Career Development Center, Main Building, USEK — Kaslik, Lebanon</p></div></div>
           <div class="contact-method"><div class="contact-method-icon">🕐</div><div><h4>Office Hours</h4><p>Mon – Fri: 8:00 AM – 4:00 PM</p></div></div>
@@ -719,117 +749,39 @@
   <footer><div><div class="footer-logo">GradLink <span>USEK</span></div><p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p></div><div class="footer-links"><a onclick="showPage('home')">Home</a><a onclick="showPage('students')">Students</a><a onclick="showPage('businesses')">Businesses</a></div></footer>
 </div>
 
-<!-- ══════════════════ SCRIPT ══════════════════ -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-/*
- ╔══════════════════════════════════════════════════════════════════╗
- ║              SUPABASE SETUP INSTRUCTIONS                        ║
- ╠══════════════════════════════════════════════════════════════════╣
- ║  1. Go to https://supabase.com and create a FREE project        ║
- ║  2. In your project dashboard → Settings → API                  ║
- ║     Copy your Project URL and anon/public key                   ║
- ║  3. Replace the two values below                                ║
- ║                                                                  ║
- ║  4. Run this SQL in the Supabase SQL Editor:                    ║
- ║  ──────────────────────────────────────────                     ║
- ║                                                                  ║
- ║  -- Student profiles table                                      ║
- ║  create table profiles (                                        ║
- ║    id uuid references auth.users primary key,                   ║
- ║    first_name text, last_name text,                             ║
- ║    major text, gpa numeric, year_of_study text,                 ║
- ║    location text, skills text,                                  ║
- ║    opp_type text, compensation text,                            ║
- ║    bio text, visible boolean default true,                      ║
- ║    created_at timestamptz default now()                         ║
- ║  );                                                              ║
- ║  alter table profiles enable row level security;                ║
- ║  create policy "Public profiles visible to all"                 ║
- ║    on profiles for select using (visible = true);               ║
- ║  create policy "Users manage own profile"                       ║
- ║    on profiles for all using (auth.uid() = id);                 ║
- ║                                                                  ║
- ║  -- Opportunities table                                         ║
- ║  create table opportunities (                                   ║
- ║    id uuid default gen_random_uuid() primary key,               ║
- ║    title text, type text, compensation text,                    ║
- ║    major text, location text, description text,                 ║
- ║    deadline date, posted_by uuid references auth.users,        ║
- ║    company_name text, active boolean default true,              ║
- ║    created_at timestamptz default now()                         ║
- ║  );                                                              ║
- ║  alter table opportunities enable row level security;           ║
- ║  create policy "Anyone can view active opps"                    ║
- ║    on opportunities for select using (active = true);           ║
- ║  create policy "Auth users can insert opps"                     ║
- ║    on opportunities for insert with check (auth.uid() is not null); ║
- ║                                                                  ║
- ║  -- Applications table                                          ║
- ║  create table applications (                                    ║
- ║    id uuid default gen_random_uuid() primary key,               ║
- ║    student_id uuid references auth.users,                       ║
- ║    opportunity_id uuid references opportunities,                ║
- ║    status text default 'pending',                               ║
- ║    created_at timestamptz default now(),                        ║
- ║    unique(student_id, opportunity_id)                           ║
- ║  );                                                              ║
- ║  alter table applications enable row level security;            ║
- ║  create policy "Students manage own applications"               ║
- ║    on applications for all using (auth.uid() = student_id);     ║
- ║                                                                  ║
- ║  -- Contact messages table                                      ║
- ║  create table contact_messages (                                ║
- ║    id uuid default gen_random_uuid() primary key,               ║
- ║    first_name text, last_name text,                             ║
- ║    email text, sender_type text, subject text,                  ║
- ║    message text, created_at timestamptz default now()           ║
- ║  );                                                              ║
- ║  alter table contact_messages enable row level security;        ║
- ║  create policy "Anyone can insert contact messages"             ║
- ║    on contact_messages for insert with check (true);            ║
- ║                                                                  ║
- ║  5. In Supabase Auth settings → Email Auth:                     ║
- ║     Enable "Confirm email" for production                       ║
- ║     Or disable it for testing/demo                              ║
- ╚══════════════════════════════════════════════════════════════════╝
-*/
-
+<!-- SCRIPT -->
+<script>
 // ── CONFIGURATION ──────────────────────────────────────────────────
-const SUPABASE_URL  = 'https://wgdikymnvztwohvonknf.supabase.co';   // e.g. https://abcxyz.supabase.co
+const SUPABASE_URL  = 'https://wgdikymnvztwohvonknf.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_UnwVSAIoD4m-RN0LFbQCYA_nosIBDDj';
 
-// Valid USEK email domains
-const USEK_DOMAINS = ['students.usek.edu.lb', 'usek.edu.lb', 'net.usek.edu.lb'];
+// Admin / business accounts (non-students)
+const ADMIN_EMAIL   = 'eidrserge@outlook.com';
+const USEK_DOMAINS  = ['students.usek.edu.lb', 'usek.edu.lb', 'net.usek.edu.lb'];
 
 // ── INIT ───────────────────────────────────────────────────────────
 const { createClient } = supabase;
-let sb, currentUser = null;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+let currentUser = null;
+let isBizUser   = false; // true if signed in via business login
 
-function isConfigured() {
-  return SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON !== 'YOUR_SUPABASE_ANON_KEY';
-}
-
-if (isConfigured()) {
-  sb = createClient(SUPABASE_URL, SUPABASE_ANON);
-  document.getElementById('config-banner').style.display = 'none';
-  initAuth();
-} else {
-  // Demo mode — load sample data
-  loadSampleOpportunities();
-  loadSampleProfiles('profiles-grid');
-  loadSampleProfiles('biz-profiles-grid');
-}
+initAuth();
 
 // ── AUTH STATE ─────────────────────────────────────────────────────
 async function initAuth() {
   const { data: { session } } = await sb.auth.getSession();
-  if (session?.user) onSignedIn(session.user);
-
+  if (session?.user) {
+    // Restore biz flag from sessionStorage
+    if (sessionStorage.getItem('gradlink_biz') === '1') {
+      isBizUser = true;
+      onBizSignedIn(session.user);
+    } else {
+      onSignedIn(session.user);
+    }
+  }
   sb.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && session?.user) onSignedIn(session.user);
     if (event === 'SIGNED_OUT') onSignedOut();
   });
-
   loadOpportunities();
   loadPublicProfiles('profiles-grid');
   loadPublicProfiles('biz-profiles-grid');
@@ -838,25 +790,48 @@ async function initAuth() {
 
 function onSignedIn(user) {
   currentUser = user;
-  document.getElementById('nav-dashboard').style.display = '';
-  document.getElementById('nav-signout').style.display = '';
-  document.getElementById('nav-getstarted').style.display = 'none';
-  document.getElementById('auth-section').style.display = 'none';
-  enablePostForm();
-  // Update any already-rendered "Sign In" buttons to "Apply"
+  isBizUser   = false;
+  sessionStorage.removeItem('gradlink_biz');
+  document.getElementById('nav-dashboard').style.display     = '';
+  document.getElementById('nav-biz-dashboard').style.display = 'none';
+  document.getElementById('nav-signout').style.display       = '';
+  document.getElementById('nav-getstarted').style.display    = 'none';
+  document.getElementById('auth-section').style.display      = 'none';
+  disablePostForm(); // students can't post
   document.querySelectorAll('.apply-btn').forEach(btn => {
     if (btn.textContent.trim() === 'Sign In') btn.textContent = 'Apply';
   });
-  // Mark any opportunities already applied to
   markApplied();
+}
+
+function onBizSignedIn(user) {
+  currentUser = user;
+  isBizUser   = true;
+  sessionStorage.setItem('gradlink_biz', '1');
+  document.getElementById('nav-dashboard').style.display     = 'none';
+  document.getElementById('nav-biz-dashboard').style.display = '';
+  document.getElementById('nav-signout').style.display       = '';
+  document.getElementById('nav-getstarted').style.display    = 'none';
+  // On student page: apply buttons become N/A for biz users
+  document.querySelectorAll('.apply-btn').forEach(btn => {
+    btn.textContent = 'N/A';
+    btn.classList.add('na-btn');
+    btn.disabled = true;
+  });
+  enablePostForm();
+  document.getElementById('biz-dash-greeting').textContent =
+    'Welcome back, ' + (user.email?.split('@')[0] || 'Partner') + '!';
 }
 
 function onSignedOut() {
   currentUser = null;
-  document.getElementById('nav-dashboard').style.display = 'none';
-  document.getElementById('nav-signout').style.display = 'none';
-  document.getElementById('nav-getstarted').style.display = '';
-  document.getElementById('auth-section').style.display = '';
+  isBizUser   = false;
+  sessionStorage.removeItem('gradlink_biz');
+  document.getElementById('nav-dashboard').style.display     = 'none';
+  document.getElementById('nav-biz-dashboard').style.display = 'none';
+  document.getElementById('nav-signout').style.display       = 'none';
+  document.getElementById('nav-getstarted').style.display    = '';
+  document.getElementById('auth-section').style.display      = '';
   disablePostForm();
 }
 
@@ -868,41 +843,41 @@ function showPage(name) {
   const navEl = document.getElementById('nav-' + name);
   if (navEl) navEl.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (name === 'dashboard' && currentUser) loadDashboard();
+  if (name === 'dashboard' && currentUser && !isBizUser) loadDashboard();
+  if (name === 'biz-dashboard' && currentUser && isBizUser) loadBizDashboard();
 }
 
-// ── SIGN IN ────────────────────────────────────────────────────────
+// ── STUDENT SIGN IN ────────────────────────────────────────────────
 async function signIn() {
-  const email = document.getElementById('signin-email').value.trim();
+  const email    = document.getElementById('signin-email').value.trim();
   const password = document.getElementById('signin-password').value;
-  const alertEl = document.getElementById('signin-alert');
+  const alertEl  = document.getElementById('signin-alert');
 
   if (!isUsekEmail(email)) return showAlert(alertEl, 'error', '❌ Please use your USEK university email address.');
   if (!password) return showAlert(alertEl, 'error', '❌ Please enter your password.');
-  if (!isConfigured()) return showAlert(alertEl, 'info', 'ℹ️ Demo mode — connect Supabase to enable real auth.');
 
   setLoading('signin-btn', true);
   const { data, error } = await sb.auth.signInWithPassword({ email, password });
   setLoading('signin-btn', false);
 
   if (error) return showAlert(alertEl, 'error', '❌ ' + (error.message || 'Sign in failed. Check your credentials.'));
+  onSignedIn(data.user);
   showAlert(alertEl, 'success', '✅ Signed in! Redirecting to your dashboard…');
   setTimeout(() => showPage('dashboard'), 1200);
 }
 
 // ── REGISTER ──────────────────────────────────────────────────────
 async function register() {
-  const alertEl = document.getElementById('register-alert');
-  const email = document.getElementById('reg-email').value.trim();
+  const alertEl  = document.getElementById('register-alert');
+  const email    = document.getElementById('reg-email').value.trim();
   const password = document.getElementById('reg-password').value;
-  const confirm = document.getElementById('reg-confirm-password').value;
+  const confirm  = document.getElementById('reg-confirm-password').value;
 
   if (!document.getElementById('reg-firstname').value.trim()) return showAlert(alertEl, 'error', '❌ First name is required.');
-  if (!document.getElementById('reg-lastname').value.trim()) return showAlert(alertEl, 'error', '❌ Last name is required.');
+  if (!document.getElementById('reg-lastname').value.trim())  return showAlert(alertEl, 'error', '❌ Last name is required.');
   if (!isUsekEmail(email)) return showAlert(alertEl, 'error', '❌ Please use your USEK university email.');
   if (password.length < 6) return showAlert(alertEl, 'error', '❌ Password must be at least 6 characters.');
   if (password !== confirm) return showAlert(alertEl, 'error', '❌ Passwords do not match.');
-  if (!isConfigured()) return showAlert(alertEl, 'info', 'ℹ️ Demo mode — connect Supabase to enable real registration.');
 
   const profileData = {
     first_name:    document.getElementById('reg-firstname').value.trim(),
@@ -933,17 +908,16 @@ async function register() {
 
 // ── SIGN OUT ──────────────────────────────────────────────────────
 async function signOut() {
-  if (!isConfigured()) return onSignedOut();
   await sb.auth.signOut();
+  onSignedOut();
   showPage('home');
 }
 
 // ── PASSWORD RESET ────────────────────────────────────────────────
 async function resetPassword() {
-  const email = document.getElementById('signin-email').value.trim();
+  const email   = document.getElementById('signin-email').value.trim();
   const alertEl = document.getElementById('signin-alert');
   if (!email) return showAlert(alertEl, 'error', '❌ Enter your email address first.');
-  if (!isConfigured()) return showAlert(alertEl, 'info', 'ℹ️ Demo mode — connect Supabase to enable password reset.');
   const { error } = await sb.auth.resetPasswordForEmail(email);
   if (error) return showAlert(alertEl, 'error', '❌ ' + error.message);
   showAlert(alertEl, 'success', '✅ Password reset email sent! Check your inbox.');
@@ -954,26 +928,37 @@ let allOpps = [];
 
 async function loadOpportunities() {
   const { data, error } = await sb.from('opportunities').select('*').eq('active', true).order('created_at', { ascending: false });
-  if (error || !data) { document.getElementById('opp-list').innerHTML = renderSampleOpps(); return; }
-  allOpps = data.length > 0 ? data : getSampleOppsData();
+  if (error || !data || data.length === 0) {
+    document.getElementById('opp-list').innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>No opportunities posted yet. Check back soon!</p></div>';
+    return;
+  }
+  allOpps = data;
   renderOpportunities(allOpps);
 }
 
 async function loadStats() {
   const { count: studentCount } = await sb.from('profiles').select('*', { count: 'exact', head: true });
-  const { count: oppCount } = await sb.from('opportunities').select('*', { count: 'exact', head: true }).eq('active', true);
+  const { count: oppCount }     = await sb.from('opportunities').select('*', { count: 'exact', head: true }).eq('active', true);
   if (studentCount > 0) document.getElementById('stat-students').textContent = (studentCount + 4000).toLocaleString() + '+';
-  if (oppCount > 0) document.getElementById('stat-opps').textContent = (oppCount + 840).toLocaleString() + '+';
+  if (oppCount > 0)     document.getElementById('stat-opps').textContent     = (oppCount + 840).toLocaleString() + '+';
 }
 
 function renderOpportunities(opps, filter = 'all') {
-  const list = document.getElementById('opp-list');
+  const list  = document.getElementById('opp-list');
   const icons = { 'Full-time Job': '💼', 'Internship': '📋', 'Part-time Job': '⏰', 'Project / Freelance': '🎨' };
   let filtered = opps;
-  if (filter === 'paid') filtered = opps.filter(o => o.compensation === 'Paid');
-  else if (filter !== 'all') filtered = opps.filter(o => o.type === filter || o.location?.includes(filter));
+  if (filter === 'paid')       filtered = opps.filter(o => o.compensation === 'Paid');
+  else if (filter !== 'all')   filtered = opps.filter(o => o.type === filter || o.location?.includes(filter));
 
-  if (filtered.length === 0) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>No opportunities found for this filter.</p></div>'; return; }
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>No opportunities found for this filter.</p></div>';
+    return;
+  }
+
+  // Determine apply button state
+  const btnLabel = isBizUser ? 'N/A' : (currentUser ? 'Apply' : 'Sign In to Apply');
+  const btnClass = isBizUser ? 'apply-btn na-btn' : 'apply-btn';
+  const btnDisabled = isBizUser ? 'disabled' : '';
 
   list.innerHTML = filtered.map(o => `
     <div class="opp-card">
@@ -991,12 +976,11 @@ function renderOpportunities(opps, filter = 'all') {
         <div class="opp-type">${o.type}</div>
         ${o.deadline ? `<div class="opp-deadline">Deadline: ${formatDate(o.deadline)}</div>` : ''}
       </div>
-      <button class="apply-btn" id="apply-${o.id}" onclick="applyToOpp('${o.id}', this)" ${currentRole === 'business' ? 'disabled style="background:var(--grey);cursor:default;"' : ''}>${currentRole === 'business' ? 'N/A' : currentUser ? 'Apply' : 'Sign In'}</button>
+      <button class="${btnClass}" id="apply-${o.id}" onclick="applyToOpp('${o.id}', this)" ${btnDisabled}>${btnLabel}</button>
     </div>
   `).join('');
 
-  // Check which ones are already applied
-  if (currentUser) markApplied();
+  if (currentUser && !isBizUser) markApplied();
 }
 
 async function markApplied() {
@@ -1008,17 +992,12 @@ async function markApplied() {
 }
 
 async function applyToOpp(oppId, btn) {
+  if (isBizUser) return; // businesses can't apply
   if (!currentUser) {
     showPage('students');
     setTimeout(() => document.getElementById('auth-section').scrollIntoView({ behavior: 'smooth' }), 300);
     return;
   }
-  // Block business accounts from applying
-  if (currentRole === 'business') {
-    alert('Business accounts cannot apply to opportunities. Please sign in as a student.');
-    return;
-  }
-  if (!isConfigured()) { btn.textContent = 'Applied ✓'; btn.classList.add('applied'); btn.disabled = true; return; }
   btn.disabled = true; btn.textContent = '…';
   const { error } = await sb.from('applications').insert({ student_id: currentUser.id, opportunity_id: oppId });
   if (error) {
@@ -1038,19 +1017,25 @@ let allProfiles = [];
 
 async function loadPublicProfiles(gridId) {
   const { data, error } = await sb.from('profiles').select('*').eq('visible', true).order('created_at', { ascending: false }).limit(12);
-  if (error || !data) { renderProfiles(getSampleProfiles(), gridId); return; }
-  if (gridId === 'profiles-grid') allProfiles = data.length > 0 ? data : getSampleProfiles();
-  renderProfiles(data.length > 0 ? data : getSampleProfiles(), gridId);
+  if (error || !data || data.length === 0) {
+    document.getElementById(gridId).innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">👤</div><p>No student profiles yet. Be the first to register!</p></div>';
+    return;
+  }
+  if (gridId === 'profiles-grid') allProfiles = data;
+  renderProfiles(data, gridId);
 }
 
 function renderProfiles(profiles, gridId) {
-  const grid = document.getElementById(gridId);
+  const grid   = document.getElementById(gridId);
   if (!grid) return;
   const colors = ['av-1','av-2','av-3','av-4','av-5','av-6','av-7','av-8'];
-  if (profiles.length === 0) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">👤</div><p>No profiles yet. Be the first to register!</p></div>'; return; }
+  if (profiles.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">👤</div><p>No profiles match your filter.</p></div>';
+    return;
+  }
   grid.innerHTML = profiles.map((p, i) => {
     const initials = ((p.first_name||'?')[0] + (p.last_name||'?')[0]).toUpperCase();
-    const skills = (p.skills || '').split(',').slice(0,4).map(s => `<span class="skill-tag">${s.trim()}</span>`).join('');
+    const skills   = (p.skills || '').split(',').slice(0,4).map(s => `<span class="skill-tag">${s.trim()}</span>`).join('');
     return `
       <div class="profile-card">
         <div class="profile-header">
@@ -1080,7 +1065,7 @@ document.querySelectorAll('#showcase-filters .filter-chip[data-major]').forEach(
   chip.addEventListener('click', () => {
     chip.closest('.filter-bar').querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
-    const major = chip.dataset.major;
+    const major    = chip.dataset.major;
     const filtered = major === 'all' ? allProfiles : allProfiles.filter(p => p.major === major);
     renderProfiles(filtered, 'profiles-grid');
   });
@@ -1088,16 +1073,15 @@ document.querySelectorAll('#showcase-filters .filter-chip[data-major]').forEach(
 
 function filterBizProfiles() {
   const major = document.getElementById('biz-filter-major').value;
-  const gpa = parseFloat(document.getElementById('biz-filter-gpa').value);
-  const pay = document.getElementById('biz-filter-pay').value;
-  const loc = document.getElementById('biz-filter-location').value;
-
+  const gpa   = parseFloat(document.getElementById('biz-filter-gpa').value);
+  const pay   = document.getElementById('biz-filter-pay').value;
+  const loc   = document.getElementById('biz-filter-location').value;
   let filtered = allProfiles;
   if (major) filtered = filtered.filter(p => p.major === major);
-  if (gpa) filtered = filtered.filter(p => parseFloat(p.gpa) >= gpa);
-  if (pay === 'paid') filtered = filtered.filter(p => p.compensation === 'paid' || p.compensation === 'Paid Only');
+  if (gpa)   filtered = filtered.filter(p => parseFloat(p.gpa) >= gpa);
+  if (pay === 'paid')   filtered = filtered.filter(p => p.compensation === 'paid' || p.compensation === 'Paid Only');
   if (pay === 'unpaid') filtered = filtered.filter(p => p.compensation !== 'paid' && p.compensation !== 'Paid Only');
-  if (loc) filtered = filtered.filter(p => p.location === loc);
+  if (loc)   filtered = filtered.filter(p => p.location === loc);
   renderProfiles(filtered, 'biz-profiles-grid');
 }
 
@@ -1118,10 +1102,11 @@ function disablePostForm() {
 }
 
 async function postOpportunity() {
-  const alertEl = document.getElementById('post-alert');
-  const title = document.getElementById('post-title').value.trim();
+  const alertEl    = document.getElementById('post-alert');
+  const title      = document.getElementById('post-title').value.trim();
+  const companyName = document.getElementById('post-company').value.trim();
   if (!title) return showAlert(alertEl, 'error', '❌ Please enter an opportunity title.');
-  if (!isConfigured()) return showAlert(alertEl, 'info', 'ℹ️ Demo mode — connect Supabase to save opportunities.');
+  if (!companyName) return showAlert(alertEl, 'error', '❌ Please enter your business name.');
 
   const opp = {
     title,
@@ -1132,7 +1117,8 @@ async function postOpportunity() {
     deadline:     document.getElementById('post-deadline').value || null,
     description:  document.getElementById('post-description').value.trim(),
     posted_by:    currentUser?.id,
-    company_name: document.getElementById('post-company').value.trim() || currentUser?.email?.split('@')[0] || 'Partner Company',
+    company_name: companyName,
+    active:       true,
   };
 
   setLoading('post-btn', true);
@@ -1141,41 +1127,47 @@ async function postOpportunity() {
 
   if (error) return showAlert(alertEl, 'error', '❌ ' + error.message);
   showAlert(alertEl, 'success', '✅ Opportunity published! Students can now view and apply.');
-  document.getElementById('post-company').value = '';
-  document.getElementById('post-title').value = '';
+  document.getElementById('post-title').value       = '';
+  document.getElementById('post-company').value     = '';
   document.getElementById('post-description').value = '';
   loadOpportunities();
 }
 
 // ── BUSINESS SIGN IN ─────────────────────────────────────────────
 async function bizSignIn() {
-  const email = document.getElementById('biz-email').value.trim();
+  const email    = document.getElementById('biz-email').value.trim();
   const password = document.getElementById('biz-password').value;
-  const alertEl = document.getElementById('biz-signin-alert');
+  const alertEl  = document.getElementById('biz-signin-alert');
   if (!email || !password) return showAlert(alertEl, 'error', '❌ Please fill in both fields.');
-  if (!isConfigured()) { showAlert(alertEl, 'info', 'ℹ️ Demo mode — connect Supabase to enable login.'); enablePostForm(); return; }
 
   setLoading('biz-signin-btn', true);
   const { data, error } = await sb.auth.signInWithPassword({ email, password });
   setLoading('biz-signin-btn', false);
 
   if (error) return showAlert(alertEl, 'error', '❌ ' + error.message);
-  showAlert(alertEl, 'success', '✅ Signed in! You can now post opportunities and browse profiles.');
-  enablePostForm();
+
+  // Check that the user is NOT a student (not a USEK domain email)
+  if (isUsekEmail(email)) {
+    await sb.auth.signOut();
+    return showAlert(alertEl, 'error', '❌ Students cannot access the business portal. Please use the student sign-in above.');
+  }
+
+  onBizSignedIn(data.user);
+  showAlert(alertEl, 'success', '✅ Signed in! Go to your Business Dashboard to manage postings.');
+  setTimeout(() => showPage('biz-dashboard'), 1200);
 }
 
-// ── DASHBOARD ─────────────────────────────────────────────────────
+// ── STUDENT DASHBOARD ─────────────────────────────────────────────
 async function loadDashboard() {
-  if (!currentUser || !isConfigured()) return;
+  if (!currentUser) return;
 
-  // Load profile
   const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   if (profile) {
     const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || currentUser.email;
     document.getElementById('dashboard-greeting').textContent = `Welcome back, ${profile.first_name || 'there'}!`;
-    document.getElementById('dash-name').textContent = name;
-    document.getElementById('dash-major').textContent = `${profile.major || ''} · ${profile.year_of_study || ''}`;
-    document.getElementById('dash-avatar').textContent = ((profile.first_name||'?')[0] + (profile.last_name||'?')[0]).toUpperCase();
+    document.getElementById('dash-name').textContent          = name;
+    document.getElementById('dash-major').textContent         = `${profile.major || ''} · ${profile.year_of_study || ''}`;
+    document.getElementById('dash-avatar').textContent        = ((profile.first_name||'?')[0] + (profile.last_name||'?')[0]).toUpperCase();
     document.getElementById('dash-stats').innerHTML = `
       <div class="profile-stat"><span class="profile-stat-label">GPA</span><span class="profile-stat-value">${profile.gpa || '—'}</span></div>
       <div class="profile-stat"><span class="profile-stat-label">Location</span><span class="profile-stat-value">${profile.location || '—'}</span></div>
@@ -1184,7 +1176,6 @@ async function loadDashboard() {
     `;
   }
 
-  // Load applications
   const { data: apps } = await sb.from('applications')
     .select('*, opportunities(title, type, company_name, location)')
     .eq('student_id', currentUser.id)
@@ -1207,21 +1198,86 @@ async function loadDashboard() {
   `).join('');
 }
 
+// ── BUSINESS DASHBOARD ─────────────────────────────────────────────
+async function loadBizDashboard() {
+  if (!currentUser) return;
+  const container = document.getElementById('biz-dash-opps');
+  container.innerHTML = '<div class="loading-state">Loading your opportunities…</div>';
+
+  // Load opportunities posted by this business user
+  const { data: opps, error } = await sb.from('opportunities')
+    .select('*')
+    .eq('posted_by', currentUser.id)
+    .order('created_at', { ascending: false });
+
+  if (error || !opps || opps.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>You haven\'t posted any opportunities yet.<br>Go to the Businesses page to post one.</p></div>';
+    return;
+  }
+
+  // For each opp, load applicants
+  let html = '';
+  for (const opp of opps) {
+    const { data: apps } = await sb.from('applications')
+      .select('*, profiles(first_name, last_name, major, gpa)')
+      .eq('opportunity_id', opp.id)
+      .order('created_at', { ascending: false });
+
+    const applicantRows = apps && apps.length > 0
+      ? apps.map(a => `
+          <div class="applicant-row">
+            <div>
+              <div class="applicant-name">${a.profiles?.first_name || ''} ${a.profiles?.last_name || ''}</div>
+              <div class="applicant-major">${a.profiles?.major || ''}${a.profiles?.gpa ? ' · GPA ' + parseFloat(a.profiles.gpa).toFixed(1) : ''}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span class="app-status ${a.status}">${a.status.charAt(0).toUpperCase() + a.status.slice(1)}</span>
+              ${a.status !== 'accepted'
+                ? `<button class="btn-accept" onclick="acceptApplicant('${a.id}', this)">Accept</button>`
+                : `<button class="btn-accept" disabled>Accepted ✓</button>`}
+            </div>
+          </div>`)
+        .join('')
+      : '<div style="font-size:0.85rem;color:var(--grey);padding:8px 0;">No applicants yet.</div>';
+
+    html += `
+      <div class="biz-opp-card">
+        <div class="biz-opp-header">
+          <div class="biz-opp-title">${opp.title}</div>
+          <span class="badge-posted">Posted</span>
+        </div>
+        <div class="biz-opp-meta">${opp.company_name || ''} · ${opp.type} · ${opp.location || ''} ${opp.deadline ? '· Deadline: ' + formatDate(opp.deadline) : ''}</div>
+        <div class="biz-applicants">${applicantRows}</div>
+      </div>`;
+  }
+  container.innerHTML = html;
+}
+
+async function acceptApplicant(appId, btn) {
+  btn.disabled = true; btn.textContent = '…';
+  const { error } = await sb.from('applications').update({ status: 'accepted' }).eq('id', appId);
+  if (error) {
+    btn.disabled = false; btn.textContent = 'Accept';
+    alert('Failed to accept: ' + error.message);
+    return;
+  }
+  btn.textContent = 'Accepted ✓';
+  // Update status badge in the row
+  const row = btn.closest('.applicant-row');
+  const badge = row.querySelector('.app-status');
+  if (badge) { badge.className = 'app-status accepted'; badge.textContent = 'Accepted'; }
+}
+
 // ── CONTACT FORM ─────────────────────────────────────────────────
 async function submitContact() {
   const alertEl = document.getElementById('contact-alert');
-  const first = document.getElementById('contact-first').value.trim();
-  const last = document.getElementById('contact-last').value.trim();
-  const email = document.getElementById('contact-email').value.trim();
-  const msg = document.getElementById('contact-message').value.trim();
+  const first   = document.getElementById('contact-first').value.trim();
+  const last    = document.getElementById('contact-last').value.trim();
+  const email   = document.getElementById('contact-email').value.trim();
+  const msg     = document.getElementById('contact-message').value.trim();
 
   if (!first || !last || !email || !msg) return showAlert(alertEl, 'error', '❌ Please fill in all required fields.');
   if (!email.includes('@')) return showAlert(alertEl, 'error', '❌ Please enter a valid email address.');
-
-  if (!isConfigured()) {
-    showAlert(alertEl, 'success', '✅ Message sent! (Demo mode — connect Supabase to save messages.) We\'ll get back to you within one business day.');
-    return;
-  }
 
   setLoading('contact-btn', true);
   const { error } = await sb.from('contact_messages').insert({
@@ -1236,32 +1292,6 @@ async function submitContact() {
   showAlert(alertEl, 'success', '✅ Message sent! We\'ll get back to you within one business day.');
   document.getElementById('contact-message').value = '';
 }
-
-// ── SAMPLE DATA (demo mode) ───────────────────────────────────────
-function getSampleOppsData() {
-  return [
-    { id:'s1', title:'Junior Financial Analyst', company_name:'Byblos Bank', location:'Beirut', type:'Full-time Job', compensation:'Paid', major:'Business Administration', deadline:'2025-08-30' },
-    { id:'s2', title:'Software Dev Intern', company_name:'Alfa Telecom', location:'Remote', type:'Internship', compensation:'Paid', major:'Computer Science', deadline:'2025-07-15' },
-    { id:'s3', title:'Brand Design Project', company_name:'Deloitte Lebanon', location:'Beirut', type:'Project / Freelance', compensation:'Unpaid', major:'Architecture & Design', deadline:'2025-09-01' },
-    { id:'s4', title:'Civil Engineering Intern', company_name:'Boecker', location:'Jounieh', type:'Internship', compensation:'Paid', major:'Engineering', deadline:'2025-08-10' },
-    { id:'s5', title:'Legal Research Assistant', company_name:'BankMed', location:'Beirut', type:'Part-time Job', compensation:'Paid', major:'Law & Political Science', deadline:'2025-07-31' },
-  ];
-}
-
-function getSampleProfiles() {
-  return [
-    { first_name:'Sara', last_name:'Khoury', major:'Business Administration', gpa:3.8, location:'Beirut', skills:'Excel, Marketing, French, PowerPoint', compensation:'paid' },
-    { first_name:'Joe', last_name:'Nasr', major:'Computer Science', gpa:3.9, location:'Remote / Anywhere', skills:'Python, React, SQL, Node.js', compensation:'paid' },
-    { first_name:'Lara', last_name:'Habib', major:'Architecture & Design', gpa:3.5, location:'Mount Lebanon', skills:'AutoCAD, Revit, SketchUp', compensation:'unpaid' },
-    { first_name:'Mark', last_name:'Frem', major:'Engineering', gpa:3.7, location:'Mount Lebanon', skills:'MATLAB, AutoCAD, C++', compensation:'paid' },
-    { first_name:'Rita', last_name:'Abi Nader', major:'Law & Political Science', gpa:3.6, location:'Beirut', skills:'Legal Research, Arabic, French', compensation:'paid' },
-    { first_name:'Carla', last_name:'Moussa', major:'Business Administration', gpa:3.4, location:'Remote / Anywhere', skills:'Finance, Accounting, SAP', compensation:'unpaid' },
-  ];
-}
-
-function renderSampleOpps() { allOpps = getSampleOppsData(); renderOpportunities(allOpps); }
-function loadSampleOpportunities() { allOpps = getSampleOppsData(); renderOpportunities(allOpps); }
-function loadSampleProfiles(gridId) { renderProfiles(getSampleProfiles(), gridId); allProfiles = getSampleProfiles(); }
 
 // ── UTILITIES ────────────────────────────────────────────────────
 function isUsekEmail(email) {
@@ -1281,7 +1311,7 @@ function toggleRadio(label, groupId) {
 function switchTab(btn, tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('tab-signin').style.display = tab === 'signin' ? '' : 'none';
+  document.getElementById('tab-signin').style.display  = tab === 'signin' ? '' : 'none';
   document.getElementById('tab-register').style.display = tab === 'register' ? 'block' : 'none';
 }
 
@@ -1299,17 +1329,14 @@ function setLoading(btnId, loading) {
   else btn.innerHTML = btn.getAttribute('data-label') || btn.textContent.replace('Please wait…','').trim() || 'Submit';
 }
 
-
 // Save original button labels on load
 document.querySelectorAll('[id$="-btn"]').forEach(btn => btn.setAttribute('data-label', btn.textContent.trim()));
 
-// ── FORMAT DATE ───────────────────────────────────────────────────
 function formatDate(dateStr) {
   if (!dateStr) return '';
   const d = new Date(dateStr);
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
-
 </script>
 </body>
 </html>
