@@ -1383,26 +1383,45 @@ async function deleteOpportunity(oppId, btn) {
 
 // ── CONTACT FORM ─────────────────────────────────────────────────
 async function submitContact() {
-  const alertEl = document.getElementById('contact-alert');
-  const first   = document.getElementById('contact-first').value.trim();
-  const last    = document.getElementById('contact-last').value.trim();
-  const email   = document.getElementById('contact-email').value.trim();
-  const msg     = document.getElementById('contact-message').value.trim();
+  const alertEl    = document.getElementById('contact-alert');
+  const first      = document.getElementById('contact-first').value.trim();
+  const last       = document.getElementById('contact-last').value.trim();
+  const email      = document.getElementById('contact-email').value.trim();
+  const msg        = document.getElementById('contact-message').value.trim();
+  const subject    = document.getElementById('contact-subject').value;
+  const senderType = getCheckedRadio('who-group');
 
   if (!first || !last || !email || !msg) return showAlert(alertEl, 'error', '❌ Please fill in all required fields.');
   if (!email.includes('@')) return showAlert(alertEl, 'error', '❌ Please enter a valid email address.');
 
   setLoading('contact-btn', true);
-  const { error } = await sb.from('contact_messages').insert({
-    first_name: first, last_name: last, email,
-    sender_type: getCheckedRadio('who-group'),
-    subject: document.getElementById('contact-subject').value,
-    message: msg,
+
+  // Send to Formspree (forwards to eidrserge@outlook.com)
+  const formRes = await fetch('https://formspree.io/f/xojprvpb', {
+    method: 'POST',
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name:    first + ' ' + last,
+      email,
+      subject,
+      type:    senderType || 'not specified',
+      message: msg,
+    }),
   });
+
+  // Also save to Supabase as a backup record
+  await sb.from('contact_messages').insert({
+    first_name: first, last_name: last, email,
+    sender_type: senderType, subject, message: msg,
+  });
+
   setLoading('contact-btn', false);
 
-  if (error) return showAlert(alertEl, 'error', '❌ Failed to send. Please try again.');
+  if (!formRes.ok) return showAlert(alertEl, 'error', '❌ Failed to send. Please try again.');
   showAlert(alertEl, 'success', '✅ Message sent! We\'ll get back to you within one business day.');
+  document.getElementById('contact-first').value   = '';
+  document.getElementById('contact-last').value    = '';
+  document.getElementById('contact-email').value   = '';
   document.getElementById('contact-message').value = '';
 }
 
