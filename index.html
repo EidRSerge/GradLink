@@ -397,12 +397,30 @@
       <div class="audience-card business"><div class="audience-card-icon">🏢</div><h3>Businesses & Partners</h3><p>Access a verified talent pool from one of Lebanon's top universities. Post openings, search profiles by major and skills, and partner with USEK officially.</p><button class="btn-white" onclick="showPage('businesses')">Explore for Businesses →</button></div>
     </div>
   </section>
-  <div class="partners">
-    <div class="partners-label">Trusted by leading organizations across Lebanon</div>
-    <div class="partners-logos">
-      <div class="partner-logo">Deloitte</div><div class="partner-logo">BankMed</div><div class="partner-logo">Byblos Bank</div><div class="partner-logo">Boecker</div><div class="partner-logo">Alfa</div><div class="partner-logo">BDL</div><div class="partner-logo">Malia Group</div>
+  <section class="students-showcase">
+    <div class="showcase-header">
+      <div><div class="section-label">Partner Businesses</div><h2 class="section-title" style="margin-bottom:0;">Companies Hiring USEK Graduates</h2></div>
     </div>
-  </div>
+    <div id="home-opps-grid" class="opp-grid">
+      <div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">🏢</div><p>Partner opportunities will appear here once businesses start posting.</p></div>
+    </div>
+  </section>
+  <section class="students-showcase" style="background:var(--grey-light);">
+    <div class="showcase-header">
+      <div><div class="section-label">Student Showcase</div><h2 class="section-title" style="margin-bottom:0;">Profiles Visible to Businesses</h2></div>
+    </div>
+    <div class="filter-bar" id="showcase-filters">
+      <button class="filter-chip active" data-major="all">All Majors</button>
+      <button class="filter-chip" data-major="Business Administration">Business</button>
+      <button class="filter-chip" data-major="Engineering">Engineering</button>
+      <button class="filter-chip" data-major="Computer Science">CS</button>
+      <button class="filter-chip" data-major="Medicine & Medical Sciences">Medicine</button>
+      <button class="filter-chip" data-major="Law & Political Science">Law</button>
+    </div>
+    <div id="profiles-grid" class="profiles-grid">
+      <div class="loading-state" style="grid-column:1/-1;">Loading profiles…</div>
+    </div>
+  </section>
   <footer><div><div class="footer-logo">GradLink <span>USEK</span></div><p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p></div><div class="footer-links"><a onclick="showPage('students')">Students</a><a onclick="showPage('businesses')">Businesses</a><a onclick="showPage('contact')">Contact</a><a href="https://www.usek.edu.lb" target="_blank">USEK.edu.lb</a></div></footer>
 </div>
 
@@ -516,7 +534,8 @@
     </div>
   </section>
 
-  <!-- Browse Opportunities -->
+  <!-- Browse Opportunities — only visible after student signs in -->
+  <div id="student-opps-section" style="display:none;">
   <section class="opportunities">
     <div class="section-label">Browse Opportunities</div>
     <h2 class="section-title" style="margin-bottom:8px;">Find Your Next Step</h2>
@@ -534,24 +553,7 @@
       <div class="loading-state">Loading opportunities…</div>
     </div>
   </section>
-
-  <!-- Student Profiles Showcase -->
-  <section class="students-showcase">
-    <div class="showcase-header">
-      <div><div class="section-label">Student Showcase</div><h2 class="section-title" style="margin-bottom:0;">Profiles Visible to Businesses</h2></div>
-    </div>
-    <div class="filter-bar" id="showcase-filters">
-      <button class="filter-chip active" data-major="all">All Majors</button>
-      <button class="filter-chip" data-major="Business Administration">Business</button>
-      <button class="filter-chip" data-major="Engineering">Engineering</button>
-      <button class="filter-chip" data-major="Computer Science">CS</button>
-      <button class="filter-chip" data-major="Medicine & Medical Sciences">Medicine</button>
-      <button class="filter-chip" data-major="Law & Political Science">Law</button>
-    </div>
-    <div id="profiles-grid" class="profiles-grid">
-      <div class="loading-state" style="grid-column:1/-1;">Loading profiles…</div>
-    </div>
-  </section>
+  </div>
 
   <footer><div><div class="footer-logo">GradLink <span>USEK</span></div><p>© 2025 Holy Spirit University of Kaslik. All rights reserved.</p></div><div class="footer-links"><a onclick="showPage('home')">Home</a><a onclick="showPage('businesses')">Businesses</a><a onclick="showPage('contact')">Contact</a></div></footer>
 </div>
@@ -789,6 +791,7 @@ async function initAuth() {
     if (event === 'SIGNED_OUT') onSignedOut();
   });
   loadOpportunities();
+  loadHomeOpps();
   loadPublicProfiles('profiles-grid');
   loadStats();
 }
@@ -802,6 +805,8 @@ function onSignedIn(user) {
   document.getElementById('nav-signout').style.display       = '';
   document.getElementById('nav-getstarted').style.display    = 'none';
   document.getElementById('auth-section').style.display      = 'none';
+  const studentOpps = document.getElementById('student-opps-section');
+  if (studentOpps) { studentOpps.style.display = ''; loadOpportunities(); }
   disablePostForm(); // students can't post
   document.querySelectorAll('.apply-btn').forEach(btn => {
     if (btn.textContent.trim() === 'Sign In') btn.textContent = 'Apply';
@@ -842,6 +847,8 @@ function onSignedOut() {
   document.getElementById('nav-signout').style.display       = 'none';
   document.getElementById('nav-getstarted').style.display    = '';
   document.getElementById('auth-section').style.display      = '';
+  const studentOppsOut = document.getElementById('student-opps-section');
+  if (studentOppsOut) studentOppsOut.style.display = 'none';
   disablePostForm();
   const bizSignInCardOut = document.getElementById('biz-signin-card');
   if (bizSignInCardOut) bizSignInCardOut.style.display = '';
@@ -960,6 +967,32 @@ async function resetPassword() {
 
 // ── LOAD OPPORTUNITIES ────────────────────────────────────────────
 let allOpps = [];
+
+async function loadHomeOpps() {
+  const grid = document.getElementById('home-opps-grid');
+  if (!grid) return;
+  const { data, error } = await sb.from('opportunities').select('*').eq('active', true).order('created_at', { ascending: false }).limit(6);
+  if (error || !data || data.length === 0) return;
+  const icons = { 'Full-time Job': '💼', 'Internship': '📋', 'Part-time Job': '⏰', 'Project / Freelance': '🎨' };
+  grid.innerHTML = data.map(o => `
+    <div class="opp-card">
+      <div class="opp-icon">${icons[o.type] || '💼'}</div>
+      <div class="opp-info">
+        <div class="opp-title">${o.title}</div>
+        <div class="opp-company">${o.company_name || 'USEK Partner'} · ${o.location || ''}</div>
+        <div class="opp-tags">
+          <span class="${o.compensation === 'Paid' ? 'badge-paid' : 'badge-unpaid'}">${o.compensation}</span>
+          <span class="skill-tag">${o.type}</span>
+          ${o.major && o.major !== 'All Majors' ? '<span class="skill-tag">' + o.major + '</span>' : ''}
+        </div>
+      </div>
+      <div class="opp-right">
+        <div class="opp-type">${o.type}</div>
+        ${o.deadline ? '<div class="opp-deadline">Deadline: ' + formatDate(o.deadline) + '</div>' : ''}
+      </div>
+    </div>
+  `).join('');
+}
 
 async function loadOpportunities() {
   const { data, error } = await sb.from('opportunities').select('*').eq('active', true).order('created_at', { ascending: false });
