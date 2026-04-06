@@ -800,7 +800,7 @@ const USEK_DOMAINS = ['students.usek.edu.lb', 'usek.edu.lb', 'net.usek.edu.lb'];
 
 // ── INIT ───────────────────────────────────────────────────────────
 const { createClient } = supabase;
-let sb, currentUser = null;
+let sb, currentUser = null, currentRole = null;
 
 function isConfigured() {
   return SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON !== 'YOUR_SUPABASE_ANON_KEY';
@@ -833,23 +833,37 @@ async function initAuth() {
   loadStats();
 }
 
-function onSignedIn(user) {
+async function onSignedIn(user) {
   currentUser = user;
-  document.getElementById('nav-dashboard').style.display = '';
-  document.getElementById('nav-signout').style.display = '';
-  document.getElementById('nav-getstarted').style.display = 'none';
-  document.getElementById('auth-section').style.display = 'none';
-  enablePostForm();
-  // Update any already-rendered "Sign In" buttons to "Apply"
-  document.querySelectorAll('.apply-btn').forEach(btn => {
-    if (btn.textContent.trim() === 'Sign In') btn.textContent = 'Apply';
-  });
-  // Mark any opportunities already applied to
-  markApplied();
+  // Check if this user is a business account
+  const { data: bizData } = await sb.from('businesses').select('id, company_name').eq('id', user.id).single();
+  currentRole = bizData ? 'business' : 'student';
+  currentUser.role = currentRole;
+
+  if (currentRole === 'business') {
+    // Business signed in — show business nav only
+    document.getElementById('nav-signout').style.display = '';
+    document.getElementById('nav-getstarted').style.display = 'none';
+    document.getElementById('nav-dashboard').style.display = 'none';
+    enablePostForm();
+  } else {
+    // Student signed in — show student nav only
+    document.getElementById('nav-dashboard').style.display = '';
+    document.getElementById('nav-signout').style.display = '';
+    document.getElementById('nav-getstarted').style.display = 'none';
+    document.getElementById('auth-section').style.display = 'none';
+    disablePostForm();
+    // Update any already-rendered "Sign In" buttons to "Apply"
+    document.querySelectorAll('.apply-btn').forEach(btn => {
+      if (btn.textContent.trim() === 'Sign In') btn.textContent = 'Apply';
+    });
+    markApplied();
+  }
 }
 
 function onSignedOut() {
   currentUser = null;
+  currentRole = null;
   document.getElementById('nav-dashboard').style.display = 'none';
   document.getElementById('nav-signout').style.display = 'none';
   document.getElementById('nav-getstarted').style.display = '';
@@ -868,7 +882,7 @@ function showPage(name) {
   if (name === 'dashboard' && currentUser) loadDashboard();
 }
 
-// ── SIGN IN ────────────────────────────────────────────────────────
+// ── SIGN IN (students only) ────────────────────────────────────────
 async function signIn() {
   const email = document.getElementById('signin-email').value.trim();
   const password = document.getElementById('signin-password').value;
@@ -883,6 +897,14 @@ async function signIn() {
   setLoading('signin-btn', false);
 
   if (error) return showAlert(alertEl, 'error', '❌ ' + (error.message || 'Sign in failed. Check your credentials.'));
+
+  // Block business accounts from using the student login
+  const { data: bizCheck } = await sb.from('businesses').select('id').eq('id', data.user.id).single();
+  if (bizCheck) {
+    await sb.auth.signOut();
+    return showAlert(alertEl, 'error', '❌ This is a business account. Please sign in from the Businesses page.');
+  }
+
   showAlert(alertEl, 'success', '✅ Signed in! Redirecting to your dashboard…');
   setTimeout(() => showPage('dashboard'), 1200);
 }
@@ -1151,7 +1173,15 @@ async function bizSignIn() {
   setLoading('biz-signin-btn', false);
 
   if (error) return showAlert(alertEl, 'error', '❌ ' + error.message);
-  showAlert(alertEl, 'success', '✅ Signed in! You can now post opportunities and browse profiles.');
+
+  // Block student accounts from using the business login
+  const { data: bizCheck } = await sb.from('businesses').select('id, company_name').eq('id', data.user.id).single();
+  if (!bizCheck) {
+    await sb.auth.signOut();
+    return showAlert(alertEl, 'error', '❌ This is a student account. Please sign in from the Students page.');
+  }
+
+  showAlert(alertEl, 'success', `✅ Signed in as ${bizCheck.company_name}! You can now post opportunities.`);
   enablePostForm();
 }
 
