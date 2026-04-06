@@ -598,7 +598,7 @@
   <section class="biz-section" style="background:var(--grey-light);">
     <div class="biz-grid">
       <!-- Business Sign In -->
-      <div class="auth-card">
+      <div class="auth-card" id="biz-signin-card">
         <div class="card-title">Partner Business Login</div>
         <div class="card-sub">Sign in with your registered business account.</div>
         <div class="form-field"><label class="form-label">Business Email</label><input class="form-input" type="email" id="biz-email" placeholder="hr@yourbusiness.com"/></div>
@@ -651,25 +651,27 @@
       </div>
     </div>
 
-    <!-- Search Students -->
-    <div class="section-divider"><hr/><span>Search & Filter Student Profiles</span><hr/></div>
-    <div class="students-filter">
-      <select class="form-select" id="biz-filter-major" onchange="filterBizProfiles()">
-        <option value="">All Majors</option><option>Business Administration</option><option>Computer Science</option>
-        <option>Engineering</option><option>Law & Political Science</option><option>Architecture & Design</option>
-      </select>
-      <select class="form-select" id="biz-filter-gpa" onchange="filterBizProfiles()">
-        <option value="">Min GPA — Any</option><option value="3.0">3.0+</option><option value="3.5">3.5+</option><option value="3.75">3.75+</option>
-      </select>
-      <select class="form-select" id="biz-filter-pay" onchange="filterBizProfiles()">
-        <option value="">Compensation — Any</option><option value="paid">Paid Only</option><option value="unpaid">Accepts Unpaid</option>
-      </select>
-      <select class="form-select" id="biz-filter-location" onchange="filterBizProfiles()">
-        <option value="">Location — Any</option><option>Beirut</option><option>Remote / Anywhere</option><option>Mount Lebanon</option>
-      </select>
-    </div>
-    <div id="biz-profiles-grid" class="biz-profiles-grid">
-      <div class="loading-state" style="grid-column:1/-1;">Loading profiles…</div>
+    <!-- Search Students — only visible after business sign-in -->
+    <div id="biz-search-section" style="display:none;">
+      <div class="section-divider"><hr/><span>Search &amp; Filter Student Profiles</span><hr/></div>
+      <div class="students-filter">
+        <select class="form-select" id="biz-filter-major" onchange="filterBizProfiles()">
+          <option value="">All Majors</option><option>Business Administration</option><option>Computer Science</option>
+          <option>Engineering</option><option>Law &amp; Political Science</option><option>Architecture &amp; Design</option>
+        </select>
+        <select class="form-select" id="biz-filter-gpa" onchange="filterBizProfiles()">
+          <option value="">Min GPA — Any</option><option value="3.0">3.0+</option><option value="3.5">3.5+</option><option value="3.75">3.75+</option>
+        </select>
+        <select class="form-select" id="biz-filter-pay" onchange="filterBizProfiles()">
+          <option value="">Compensation — Any</option><option value="paid">Paid Only</option><option value="unpaid">Accepts Unpaid</option>
+        </select>
+        <select class="form-select" id="biz-filter-location" onchange="filterBizProfiles()">
+          <option value="">Location — Any</option><option>Beirut</option><option>Remote / Anywhere</option><option>Mount Lebanon</option>
+        </select>
+      </div>
+      <div id="biz-profiles-grid" class="biz-profiles-grid">
+        <div class="loading-state" style="grid-column:1/-1;">Loading profiles…</div>
+      </div>
     </div>
 
     <div class="partner-cta">
@@ -788,7 +790,6 @@ async function initAuth() {
   });
   loadOpportunities();
   loadPublicProfiles('profiles-grid');
-  loadPublicProfiles('biz-profiles-grid');
   loadStats();
 }
 
@@ -822,7 +823,12 @@ function onBizSignedIn(user) {
     btn.classList.add('na-btn');
     btn.disabled = true;
   });
+  const bizSignInCard = document.getElementById('biz-signin-card');
+  if (bizSignInCard) bizSignInCard.style.display = 'none';
   enablePostForm();
+  const searchSection = document.getElementById('biz-search-section');
+  if (searchSection) searchSection.style.display = '';
+  loadPublicProfiles('biz-profiles-grid');
   document.getElementById('biz-dash-greeting').textContent =
     'Welcome back, ' + (user.email?.split('@')[0] || 'Partner') + '!';
 }
@@ -837,6 +843,10 @@ function onSignedOut() {
   document.getElementById('nav-getstarted').style.display    = '';
   document.getElementById('auth-section').style.display      = '';
   disablePostForm();
+  const bizSignInCardOut = document.getElementById('biz-signin-card');
+  if (bizSignInCardOut) bizSignInCardOut.style.display = '';
+  const searchSectionOut = document.getElementById('biz-search-section');
+  if (searchSectionOut) searchSectionOut.style.display = 'none';
 }
 
 // ── NAVIGATION ─────────────────────────────────────────────────────
