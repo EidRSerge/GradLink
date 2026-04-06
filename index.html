@@ -710,7 +710,7 @@
         <h2>Contact GradLink USEK</h2>
         <p>Our team at the USEK Career Development Center manages the GradLink platform. We're here to support students, alumni, and partner businesses every step of the way.</p>
         <div class="contact-methods">
-          <div class="contact-method"><div class="contact-method-icon">📧</div><div><h4>Email</h4><p>gradlink@usek.edu.lb</p></div></div>
+          <div class="contact-method"><div class="contact-method-icon">📧</div><div><h4>Email</h4><p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ccabbeada8a0a5a2a78cb9bfa9a7e2a9a8b9e2a0ae">[email&#160;protected]</a></p></div></div>
           <div class="contact-method"><div class="contact-method-icon">📞</div><div><h4>Phone</h4><p>+961 9 600 000 ext. 2400</p></div></div>
           <div class="contact-method"><div class="contact-method-icon">📍</div><div><h4>Campus Location</h4><p>Career Development Center, Main Building, USEK — Kaslik, Lebanon</p></div></div>
           <div class="contact-method"><div class="contact-method-icon">🕐</div><div><h4>Office Hours</h4><p>Mon – Fri: 8:00 AM – 4:00 PM</p></div></div>
@@ -750,7 +750,7 @@
 </div>
 
 <!-- SCRIPT -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── CONFIGURATION ──────────────────────────────────────────────────
 const SUPABASE_URL  = 'https://wgdikymnvztwohvonknf.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_UnwVSAIoD4m-RN0LFbQCYA_nosIBDDj';
@@ -861,6 +861,13 @@ async function signIn() {
   setLoading('signin-btn', false);
 
   if (error) return showAlert(alertEl, 'error', '❌ ' + (error.message || 'Sign in failed. Check your credentials.'));
+
+  const { data: roleData } = await sb.from('user_roles').select('role').eq('id', data.user.id).single();
+  if (roleData?.role === 'business') {
+    await sb.auth.signOut();
+    return showAlert(alertEl, 'error', '❌ This account is a business account. Please use the Business login.');
+  }
+
   onSignedIn(data.user);
   showAlert(alertEl, 'success', '✅ Signed in! Redirecting to your dashboard…');
   setTimeout(() => showPage('dashboard'), 1200);
@@ -899,6 +906,7 @@ async function register() {
   if (data.user) {
     const { error: profileError } = await sb.from('profiles').upsert({ id: data.user.id, ...profileData });
     if (profileError) console.error('Profile insert error:', profileError);
+    await sb.from('user_roles').insert({ id: data.user.id, role: 'student' });
   }
 
   setLoading('register-btn', false);
@@ -1146,10 +1154,14 @@ async function bizSignIn() {
 
   if (error) return showAlert(alertEl, 'error', '❌ ' + error.message);
 
-  // Check that the user is NOT a student (not a USEK domain email)
-  if (isUsekEmail(email)) {
+  const { data: roleData } = await sb.from('user_roles').select('role').eq('id', data.user.id).single();
+  if (roleData?.role === 'student') {
     await sb.auth.signOut();
-    return showAlert(alertEl, 'error', '❌ Students cannot access the business portal. Please use the student sign-in above.');
+    return showAlert(alertEl, 'error', '❌ This is a student account. Please use the student sign-in on the Students page.');
+  }
+  if (!roleData || roleData.role !== 'business') {
+    await sb.auth.signOut();
+    return showAlert(alertEl, 'error', '❌ No business account found for this email. Contact GradLink to register your business.');
   }
 
   onBizSignedIn(data.user);
