@@ -599,7 +599,10 @@
         <div class="card-sub">Create an opening visible to all matching USEK students.</div>
         <div class="info-note" id="post-login-notice"><span class="info-note-icon">🔒</span>Sign in as a partner business to post opportunities.</div>
         <div id="post-form">
-          <div class="form-field"><label class="form-label">Opportunity Title</label><input class="form-input" type="text" id="post-title" placeholder="e.g. Marketing Intern, Junior Developer…" disabled/></div>
+          <div class="form-row">
+            <div class="form-field"><label class="form-label">Company Name</label><input class="form-input" type="text" id="post-company" placeholder="e.g. Deloitte Lebanon, BankMed…" disabled/></div>
+            <div class="form-field"><label class="form-label">Opportunity Title</label><input class="form-input" type="text" id="post-title" placeholder="e.g. Marketing Intern, Junior Developer…" disabled/></div>
+          </div>
           <div class="form-row">
             <div class="form-field">
               <label class="form-label">Type</label>
@@ -800,7 +803,7 @@ const USEK_DOMAINS = ['students.usek.edu.lb', 'usek.edu.lb', 'net.usek.edu.lb'];
 
 // ── INIT ───────────────────────────────────────────────────────────
 const { createClient } = supabase;
-let sb, currentUser = null, currentRole = null;
+let sb, currentUser = null;
 
 function isConfigured() {
   return SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON !== 'YOUR_SUPABASE_ANON_KEY';
@@ -833,37 +836,23 @@ async function initAuth() {
   loadStats();
 }
 
-async function onSignedIn(user) {
+function onSignedIn(user) {
   currentUser = user;
-  // Check if this user is a business account
-  const { data: bizData } = await sb.from('businesses').select('id, company_name').eq('id', user.id).single();
-  currentRole = bizData ? 'business' : 'student';
-  currentUser.role = currentRole;
-
-  if (currentRole === 'business') {
-    // Business signed in — show business nav only
-    document.getElementById('nav-signout').style.display = '';
-    document.getElementById('nav-getstarted').style.display = 'none';
-    document.getElementById('nav-dashboard').style.display = 'none';
-    enablePostForm();
-  } else {
-    // Student signed in — show student nav only
-    document.getElementById('nav-dashboard').style.display = '';
-    document.getElementById('nav-signout').style.display = '';
-    document.getElementById('nav-getstarted').style.display = 'none';
-    document.getElementById('auth-section').style.display = 'none';
-    disablePostForm();
-    // Update any already-rendered "Sign In" buttons to "Apply"
-    document.querySelectorAll('.apply-btn').forEach(btn => {
-      if (btn.textContent.trim() === 'Sign In') btn.textContent = 'Apply';
-    });
-    markApplied();
-  }
+  document.getElementById('nav-dashboard').style.display = '';
+  document.getElementById('nav-signout').style.display = '';
+  document.getElementById('nav-getstarted').style.display = 'none';
+  document.getElementById('auth-section').style.display = 'none';
+  enablePostForm();
+  // Update any already-rendered "Sign In" buttons to "Apply"
+  document.querySelectorAll('.apply-btn').forEach(btn => {
+    if (btn.textContent.trim() === 'Sign In') btn.textContent = 'Apply';
+  });
+  // Mark any opportunities already applied to
+  markApplied();
 }
 
 function onSignedOut() {
   currentUser = null;
-  currentRole = null;
   document.getElementById('nav-dashboard').style.display = 'none';
   document.getElementById('nav-signout').style.display = 'none';
   document.getElementById('nav-getstarted').style.display = '';
@@ -882,7 +871,7 @@ function showPage(name) {
   if (name === 'dashboard' && currentUser) loadDashboard();
 }
 
-// ── SIGN IN (students only) ────────────────────────────────────────
+// ── SIGN IN ────────────────────────────────────────────────────────
 async function signIn() {
   const email = document.getElementById('signin-email').value.trim();
   const password = document.getElementById('signin-password').value;
@@ -897,14 +886,6 @@ async function signIn() {
   setLoading('signin-btn', false);
 
   if (error) return showAlert(alertEl, 'error', '❌ ' + (error.message || 'Sign in failed. Check your credentials.'));
-
-  // Block business accounts from using the student login
-  const { data: bizCheck } = await sb.from('businesses').select('id').eq('id', data.user.id).single();
-  if (bizCheck) {
-    await sb.auth.signOut();
-    return showAlert(alertEl, 'error', '❌ This is a business account. Please sign in from the Businesses page.');
-  }
-
   showAlert(alertEl, 'success', '✅ Signed in! Redirecting to your dashboard…');
   setTimeout(() => showPage('dashboard'), 1200);
 }
@@ -1010,7 +991,7 @@ function renderOpportunities(opps, filter = 'all') {
         <div class="opp-type">${o.type}</div>
         ${o.deadline ? `<div class="opp-deadline">Deadline: ${formatDate(o.deadline)}</div>` : ''}
       </div>
-      <button class="apply-btn" id="apply-${o.id}" onclick="applyToOpp('${o.id}', this)">${currentUser ? 'Apply' : 'Sign In'}</button>
+      <button class="apply-btn" id="apply-${o.id}" onclick="applyToOpp('${o.id}', this)" ${currentRole === 'business' ? 'disabled style="background:var(--grey);cursor:default;"' : ''}>${currentRole === 'business' ? 'N/A' : currentUser ? 'Apply' : 'Sign In'}</button>
     </div>
   `).join('');
 
@@ -1030,6 +1011,11 @@ async function applyToOpp(oppId, btn) {
   if (!currentUser) {
     showPage('students');
     setTimeout(() => document.getElementById('auth-section').scrollIntoView({ behavior: 'smooth' }), 300);
+    return;
+  }
+  // Block business accounts from applying
+  if (currentRole === 'business') {
+    alert('Business accounts cannot apply to opportunities. Please sign in as a student.');
     return;
   }
   if (!isConfigured()) { btn.textContent = 'Applied ✓'; btn.classList.add('applied'); btn.disabled = true; return; }
@@ -1118,14 +1104,14 @@ function filterBizProfiles() {
 // ── POST OPPORTUNITY ──────────────────────────────────────────────
 function enablePostForm() {
   document.getElementById('post-login-notice').style.display = 'none';
-  ['post-title','post-type','post-compensation','post-major','post-location','post-deadline','post-description','post-btn'].forEach(id => {
+  ['post-company','post-title','post-type','post-compensation','post-major','post-location','post-deadline','post-description','post-btn'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = false;
   });
 }
 function disablePostForm() {
   document.getElementById('post-login-notice').style.display = '';
-  ['post-title','post-type','post-compensation','post-major','post-location','post-deadline','post-description','post-btn'].forEach(id => {
+  ['post-company','post-title','post-type','post-compensation','post-major','post-location','post-deadline','post-description','post-btn'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = true;
   });
@@ -1146,7 +1132,7 @@ async function postOpportunity() {
     deadline:     document.getElementById('post-deadline').value || null,
     description:  document.getElementById('post-description').value.trim(),
     posted_by:    currentUser?.id,
-    company_name: currentUser?.email?.split('@')[1]?.split('.')[0] || 'Partner Company',
+    company_name: document.getElementById('post-company').value.trim() || currentUser?.email?.split('@')[0] || 'Partner Company',
   };
 
   setLoading('post-btn', true);
@@ -1155,6 +1141,7 @@ async function postOpportunity() {
 
   if (error) return showAlert(alertEl, 'error', '❌ ' + error.message);
   showAlert(alertEl, 'success', '✅ Opportunity published! Students can now view and apply.');
+  document.getElementById('post-company').value = '';
   document.getElementById('post-title').value = '';
   document.getElementById('post-description').value = '';
   loadOpportunities();
@@ -1173,15 +1160,7 @@ async function bizSignIn() {
   setLoading('biz-signin-btn', false);
 
   if (error) return showAlert(alertEl, 'error', '❌ ' + error.message);
-
-  // Block student accounts from using the business login
-  const { data: bizCheck } = await sb.from('businesses').select('id, company_name').eq('id', data.user.id).single();
-  if (!bizCheck) {
-    await sb.auth.signOut();
-    return showAlert(alertEl, 'error', '❌ This is a student account. Please sign in from the Students page.');
-  }
-
-  showAlert(alertEl, 'success', `✅ Signed in as ${bizCheck.company_name}! You can now post opportunities.`);
+  showAlert(alertEl, 'success', '✅ Signed in! You can now post opportunities and browse profiles.');
   enablePostForm();
 }
 
