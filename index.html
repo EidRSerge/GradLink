@@ -300,28 +300,67 @@
   footer .footer-links a:hover { color: var(--white); }
   .divider { height: 1px; background: var(--ice); }
 
+  .dark-showcase .profile-card {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(8px);
+  }
+  .dark-showcase .profile-name { color: var(--white); }
+  .dark-showcase .profile-major { color: var(--ice); opacity: 0.85; }
+  .dark-showcase .profile-gpa { color: var(--ice); }
+  .dark-showcase .skill-tag { background: rgba(255,255,255,0.15); color: var(--white); }
+  .dark-showcase .profile-meta { color: var(--ice); opacity: 0.8; }
+  .dark-showcase .section-label { color: rgba(214,232,247,0.8); }
+  .dark-showcase .section-title { color: var(--white); }
+  .dark-showcase .filter-chip { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: var(--ice); }
+  .dark-showcase .filter-chip.active, .dark-showcase .filter-chip:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.4); color: var(--white); }
+  .dark-showcase .empty-state { color: var(--ice); }
+  .dark-showcase .loading-state { color: var(--ice); }
+
+  /* MOBILE NAV */
+  .nav-desktop { display: flex; }
+  .nav-mobile  { display: none; align-items: center; gap: 6px; }
+  .mob-dropdown { position: relative; }
+  .mob-dd-btn {
+    padding: 7px 12px; border: 1.5px solid #DDE3EC; border-radius: 8px;
+    background: var(--white); font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 600; color: var(--navy); cursor: pointer;
+    white-space: nowrap;
+  }
+  .mob-dd-btn.mob-dd-profile { border-color: var(--sky); color: var(--sky); }
+  .mob-dd-menu {
+    display: none; position: absolute; top: calc(100% + 6px); left: 0;
+    background: var(--white); border: 1px solid rgba(13,43,85,0.1);
+    border-radius: 10px; box-shadow: 0 8px 24px rgba(13,43,85,0.12);
+    min-width: 160px; z-index: 200; overflow: hidden;
+  }
+  .mob-dd-menu-right { left: auto; right: 0; }
+  .mob-dd-menu a {
+    display: block; padding: 11px 16px; font-size: 0.875rem; font-weight: 500;
+    color: var(--navy); text-decoration: none; cursor: pointer;
+    border-bottom: 1px solid var(--ice);
+  }
+  .mob-dd-menu a:last-child { border-bottom: none; }
+  .mob-dd-menu a:hover { background: var(--grey-light); }
+  .mob-dd-menu.open { display: block; }
+  .mob-cta {
+    padding: 7px 14px; background: var(--navy); color: var(--white);
+    border-radius: 8px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+    text-decoration: none;
+  }
+
   @media (max-width: 900px) {
     /* Prevent horizontal overflow */
     html, body { overflow-x: hidden; max-width: 100vw; }
     *, *::before, *::after { max-width: 100%; }
 
-    /* NAV — show hamburger menu */
-    nav { padding: 0 16px; height: 60px; }
-    .nav-logo-text { font-size: 1.05rem; }
-
-    /* Show all nav links as a collapsed horizontal scroll row */
-    .nav-links {
-      display: flex; gap: 4px; align-items: center;
-      overflow-x: auto; -webkit-overflow-scrolling: touch;
-      scrollbar-width: none; padding-right: 4px;
-    }
-    .nav-links::-webkit-scrollbar { display: none; }
-    .nav-links a {
-      display: inline-block !important;
-      font-size: 0.72rem; padding: 6px 10px;
-      white-space: nowrap; border-radius: 6px;
-    }
-    .nav-cta { font-size: 0.72rem !important; padding: 6px 12px !important; }
+    /* NAV — mobile: hide desktop, show mobile dropdowns */
+    nav { padding: 0 14px; height: 60px; }
+    .nav-logo-text { font-size: 1rem; }
+    .nav-desktop { display: none !important; }
+    .nav-mobile  { display: flex; }
+    .page { padding-top: 60px; }
 
     /* HERO */
     .hero { padding: 48px 16px 60px; min-height: auto; }
@@ -390,7 +429,9 @@
     <img src="https://raw.githubusercontent.com/EidRSerge/GradLink/main/USEK_Logo.jpg" alt="USEK Logo" style="width:38px;height:38px;border-radius:6px;object-fit:cover;"/>
     <span class="nav-logo-text">GradLink <span>USEK</span></span>
   </a>
-  <div class="nav-links">
+
+  <!-- Desktop nav -->
+  <div class="nav-links nav-desktop">
     <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
     <a onclick="showPage('students')" id="nav-students">Students</a>
     <a onclick="showPage('businesses')" id="nav-businesses">Businesses</a>
@@ -399,6 +440,31 @@
     <a id="nav-biz-dashboard" onclick="showPage('biz-dashboard')" style="display:none">Business Dashboard</a>
     <a id="nav-signout" onclick="signOut()" style="display:none;background:var(--red)!important;color:white!important;border-radius:8px!important;">Sign Out</a>
     <a onclick="showPage('students')" class="nav-cta" id="nav-getstarted">Get Started</a>
+  </div>
+
+  <!-- Mobile nav -->
+  <div class="nav-mobile">
+    <!-- Pages dropdown -->
+    <div class="mob-dropdown" id="mob-pages-dd">
+      <button class="mob-dd-btn" onclick="toggleMobDD('mob-pages-dd')">☰ Menu</button>
+      <div class="mob-dd-menu">
+        <a onclick="showPage('home');closeMobDDs()">Home</a>
+        <a onclick="showPage('students');closeMobDDs()">Students</a>
+        <a onclick="showPage('businesses');closeMobDDs()">Businesses</a>
+        <a onclick="showPage('contact');closeMobDDs()">Contact</a>
+      </div>
+    </div>
+    <!-- Profile dropdown (shown when signed in) -->
+    <div class="mob-dropdown" id="mob-profile-dd" style="display:none;">
+      <button class="mob-dd-btn mob-dd-profile" onclick="toggleMobDD('mob-profile-dd')">👤 Account</button>
+      <div class="mob-dd-menu mob-dd-menu-right">
+        <a id="mob-nav-dashboard" onclick="showPage('dashboard');closeMobDDs()" style="display:none;">My Dashboard</a>
+        <a id="mob-nav-biz-dashboard" onclick="showPage('biz-dashboard');closeMobDDs()" style="display:none;">Business Dashboard</a>
+        <a onclick="signOut();closeMobDDs()" style="color:var(--red);font-weight:600;">Sign Out</a>
+      </div>
+    </div>
+    <!-- Get Started (shown when NOT signed in) -->
+    <a class="mob-cta" id="mob-getstarted" onclick="showPage('students')">Get Started</a>
   </div>
 </nav>
 
@@ -462,64 +528,64 @@
       <div class="audience-card business"><div class="audience-card-icon">🏢</div><h3>Businesses & Partners</h3><p>Access a verified talent pool from one of Lebanon's top universities. Post openings, search profiles by major and skills, and partner with USEK officially.</p><button class="btn-white" onclick="showPage('businesses')">Explore for Businesses →</button></div>
     </div>
   </section>
-  <section class="students-showcase" style="background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);">
+  <section class="students-showcase" style="background:var(--grey-light);border-top:4px solid var(--ice);">
     <div class="showcase-header">
-      <div><div class="section-label" style="color:rgba(214,232,247,0.8);">Partner Businesses</div><h2 class="section-title" style="margin-bottom:0;color:var(--white);">Companies Hiring USEK Graduates</h2></div>
+      <div><div class="section-label">Partner Businesses</div><h2 class="section-title" style="margin-bottom:0;">Companies Hiring USEK Graduates</h2></div>
     </div>
     <div class="profiles-grid">
-      <div class="profile-card" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);backdrop-filter:blur(8px);">
+      <div class="profile-card" >
         <div class="profile-header">
           <div class="avatar av-1">SG</div>
-          <div><div class="profile-name" style="color:var(--white);">Saint-Gobain</div><div class="profile-major" style="color:var(--ice);opacity:0.8;">Engineering &amp; Manufacturing</div></div>
+          <div><div class="profile-name">Saint-Gobain</div><div class="profile-major">Engineering &amp; Manufacturing</div></div>
         </div>
         <div class="profile-skills"><span class="skill-tag">Engineering</span><span class="skill-tag">Construction</span><span class="skill-tag">Materials</span></div>
         <div class="profile-meta"><span>📍 Lebanon &amp; Region</span><span class="badge-paid">Hiring</span></div>
       </div>
-      <div class="profile-card" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);backdrop-filter:blur(8px);">
+      <div class="profile-card" >
         <div class="profile-header">
           <div class="avatar av-2">CMA</div>
-          <div><div class="profile-name" style="color:var(--white);">CMA CGM</div><div class="profile-major" style="color:var(--ice);opacity:0.8;">Logistics &amp; Shipping</div></div>
+          <div><div class="profile-name">CMA CGM</div><div class="profile-major">Logistics &amp; Shipping</div></div>
         </div>
         <div class="profile-skills"><span class="skill-tag">Logistics</span><span class="skill-tag">Supply Chain</span><span class="skill-tag">Operations</span></div>
         <div class="profile-meta"><span>📍 Beirut</span><span class="badge-paid">Hiring</span></div>
       </div>
-      <div class="profile-card" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);backdrop-filter:blur(8px);">
+      <div class="profile-card" >
         <div class="profile-header">
           <div class="avatar av-5">MR</div>
-          <div><div class="profile-name" style="color:var(--white);">Mersaco</div><div class="profile-major" style="color:var(--ice);opacity:0.8;">Medical &amp; Pharmaceutical</div></div>
+          <div><div class="profile-name">Mersaco</div><div class="profile-major">Medical &amp; Pharmaceutical</div></div>
         </div>
         <div class="profile-skills"><span class="skill-tag">Medicine</span><span class="skill-tag">Pharma</span><span class="skill-tag">Healthcare</span></div>
         <div class="profile-meta"><span>📍 Beirut</span><span class="badge-paid">Hiring</span></div>
       </div>
-      <div class="profile-card" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);backdrop-filter:blur(8px);">
+      <div class="profile-card" >
         <div class="profile-header">
           <div class="avatar av-3">BLF</div>
-          <div><div class="profile-name" style="color:var(--white);">Banque Libano-Française</div><div class="profile-major" style="color:var(--ice);opacity:0.8;">Banking &amp; Finance</div></div>
+          <div><div class="profile-name">Banque Libano-Française</div><div class="profile-major">Banking &amp; Finance</div></div>
         </div>
         <div class="profile-skills"><span class="skill-tag">Banking</span><span class="skill-tag">Finance</span><span class="skill-tag">Accounting</span></div>
         <div class="profile-meta"><span>📍 Beirut</span><span class="badge-paid">Hiring</span></div>
       </div>
-      <div class="profile-card" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);backdrop-filter:blur(8px);">
+      <div class="profile-card" >
         <div class="profile-header">
           <div class="avatar av-7">KP</div>
-          <div><div class="profile-name" style="color:var(--white);">KPMG</div><div class="profile-major" style="color:var(--ice);opacity:0.8;">Law &amp; Advisory</div></div>
+          <div><div class="profile-name">KPMG</div><div class="profile-major">Law &amp; Advisory</div></div>
         </div>
         <div class="profile-skills"><span class="skill-tag">Law</span><span class="skill-tag">Audit</span><span class="skill-tag">Consulting</span></div>
         <div class="profile-meta"><span>📍 Beirut</span><span class="badge-paid">Hiring</span></div>
       </div>
-      <div class="profile-card" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);backdrop-filter:blur(8px);">
+      <div class="profile-card" >
         <div class="profile-header">
           <div class="avatar av-4">SP</div>
-          <div><div class="profile-name" style="color:var(--white);">Spinneys</div><div class="profile-major" style="color:var(--ice);opacity:0.8;">Retail &amp; Consumer Goods</div></div>
+          <div><div class="profile-name">Spinneys</div><div class="profile-major">Retail &amp; Consumer Goods</div></div>
         </div>
         <div class="profile-skills"><span class="skill-tag">Retail</span><span class="skill-tag">Management</span><span class="skill-tag">Operations</span></div>
         <div class="profile-meta"><span>📍 Lebanon</span><span class="badge-paid">Hiring</span></div>
       </div>
     </div>
   </section>
-  <section class="students-showcase" style="background:var(--grey-light);border-top:4px solid var(--ice);">
+  <section class="students-showcase dark-showcase" style="background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);">
     <div class="showcase-header">
-      <div><div class="section-label">Student Showcase</div><h2 class="section-title" style="margin-bottom:0;">Profiles Visible to Businesses</h2></div>
+      <div><div class="section-label" style="color:rgba(214,232,247,0.8);">Student Showcase</div><h2 class="section-title" style="margin-bottom:0;color:var(--white);">Profiles Visible to Businesses</h2></div>
     </div>
     <div class="filter-bar" id="showcase-filters">
       <button class="filter-chip active" data-major="all">All Majors</button>
@@ -933,6 +999,11 @@ function onSignedIn(user) {
   document.getElementById('nav-biz-dashboard').style.display = 'none';
   document.getElementById('nav-signout').style.display       = '';
   document.getElementById('nav-getstarted').style.display    = 'none';
+  // Mobile nav
+  document.getElementById('mob-profile-dd').style.display    = '';
+  document.getElementById('mob-getstarted').style.display    = 'none';
+  document.getElementById('mob-nav-dashboard').style.display = '';
+  document.getElementById('mob-nav-biz-dashboard').style.display = 'none';
   document.getElementById('auth-section').style.display      = 'none';
   const studentOpps = document.getElementById('student-opps-section');
   if (studentOpps) { studentOpps.style.display = ''; loadOpportunities(); }
@@ -951,6 +1022,11 @@ function onBizSignedIn(user) {
   document.getElementById('nav-biz-dashboard').style.display = '';
   document.getElementById('nav-signout').style.display       = '';
   document.getElementById('nav-getstarted').style.display    = 'none';
+  // Mobile nav
+  document.getElementById('mob-profile-dd').style.display    = '';
+  document.getElementById('mob-getstarted').style.display    = 'none';
+  document.getElementById('mob-nav-dashboard').style.display = 'none';
+  document.getElementById('mob-nav-biz-dashboard').style.display = '';
   // On student page: apply buttons become N/A for biz users
   document.querySelectorAll('.apply-btn').forEach(btn => {
     btn.textContent = 'N/A';
@@ -977,6 +1053,11 @@ function onSignedOut() {
   document.getElementById('nav-biz-dashboard').style.display = 'none';
   document.getElementById('nav-signout').style.display       = 'none';
   document.getElementById('nav-getstarted').style.display    = '';
+  // Mobile nav
+  document.getElementById('mob-profile-dd').style.display    = 'none';
+  document.getElementById('mob-getstarted').style.display    = '';
+  document.getElementById('mob-nav-dashboard').style.display = 'none';
+  document.getElementById('mob-nav-biz-dashboard').style.display = 'none';
   document.getElementById('auth-section').style.display      = '';
   const studentOppsOut = document.getElementById('student-opps-section');
   if (studentOppsOut) studentOppsOut.style.display = 'none';
@@ -1625,6 +1706,24 @@ function setLoading(btnId, loading) {
   if (loading) btn.innerHTML = '<div class="spinner"></div> Please wait…';
   else btn.innerHTML = btn.getAttribute('data-label') || btn.textContent.replace('Please wait…','').trim() || 'Submit';
 }
+
+// ── MOBILE NAV DROPDOWNS ─────────────────────────────────────────
+function toggleMobDD(id) {
+  const dd = document.getElementById(id);
+  const menu = dd.querySelector('.mob-dd-menu');
+  // Close all other open menus first
+  document.querySelectorAll('.mob-dd-menu.open').forEach(m => {
+    if (m !== menu) m.classList.remove('open');
+  });
+  menu.classList.toggle('open');
+}
+function closeMobDDs() {
+  document.querySelectorAll('.mob-dd-menu.open').forEach(m => m.classList.remove('open'));
+}
+// Close dropdowns when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('.mob-dropdown')) closeMobDDs();
+});
 
 // Save original button labels on load
 document.querySelectorAll('[id$="-btn"]').forEach(btn => btn.setAttribute('data-label', btn.textContent.trim()));
