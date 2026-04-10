@@ -1103,25 +1103,9 @@ async function signIn() {
     return showAlert(alertEl, 'error', '❌ This account is a business account. Please use the Business login.');
   }
 
-  await saveProfileIfPending(data.user, email);
   onSignedIn(data.user);
   showAlert(alertEl, 'success', '✅ Signed in! Redirecting to your dashboard…');
   setTimeout(() => showPage('dashboard'), 1200);
-}
-
-// ── SAVE PENDING PROFILE (after email confirmation) ───────────────
-async function saveProfileIfPending(user, email) {
-  const key = 'pendingProfile_' + email;
-  const pending = localStorage.getItem(key);
-  if (!pending) return;
-  try {
-    const profileData = JSON.parse(pending);
-    const { error: profileError } = await sb.from('profiles').upsert({ id: user.id, ...profileData });
-    if (profileError) { console.error('Profile save error:', profileError); return; }
-    const { error: roleError } = await sb.from('user_roles').insert({ id: user.id, role: 'student' });
-    if (roleError && roleError.code !== '23505') console.error('Role save error:', roleError);
-    localStorage.removeItem(key);
-  } catch(e) { console.error('Profile parse error:', e); }
 }
 
 // ── REGISTER ──────────────────────────────────────────────────────
@@ -1151,15 +1135,31 @@ async function register() {
   };
 
   setLoading('register-btn', true);
+
+  // Sign up
   const { data, error } = await sb.auth.signUp({ email, password });
   if (error) { setLoading('register-btn', false); return showAlert(alertEl, 'error', '❌ ' + error.message); }
 
-  // Save profile data to localStorage so we can insert it after email confirmation
-  localStorage.setItem('pendingProfile_' + email, JSON.stringify(profileData));
+  // Sign in immediately so we have an active session to write the profile
+  const { data: signInData, error: signInError } = await sb.auth.signInWithPassword({ email, password });
+  if (signInError) {
+    setLoading('register-btn', false);
+    return showAlert(alertEl, 'error', '❌ Account created but could not sign in automatically. Please sign in manually.');
+  }
+
+  const userId = signInData.user.id;
+
+  // Write profile and role with active session
+  const { error: profileError } = await sb.from('profiles').upsert({ id: userId, ...profileData });
+  if (profileError) console.error('Profile save error:', profileError);
+
+  const { error: roleError } = await sb.from('user_roles').insert({ id: userId, role: 'student' });
+  if (roleError && roleError.code !== '23505') console.error('Role save error:', roleError);
 
   setLoading('register-btn', false);
-  showAlert(alertEl, 'success', '✅ Account created! Check your email, confirm it, then come back and sign in.');
-  setTimeout(() => switchTab(document.getElementById('tab-btn-signin'), 'signin'), 2500);
+  showAlert(alertEl, 'success', '✅ Profile created! Redirecting to your dashboard…');
+  onSignedIn(signInData.user);
+  setTimeout(() => showPage('dashboard'), 1500);
 }
 
 // ── SIGN OUT ──────────────────────────────────────────────────────
