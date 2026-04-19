@@ -589,11 +589,13 @@
     </div>
     <div class="filter-bar" id="showcase-filters">
       <button class="filter-chip active" data-major="all">All Majors</button>
-      <button class="filter-chip" data-major="Business Administration">Business</button>
+      <button class="filter-chip" data-major="Arts & Sciences">Arts & Sciences</button>
       <button class="filter-chip" data-major="Engineering">Engineering</button>
-      <button class="filter-chip" data-major="Computer Science">CS</button>
       <button class="filter-chip" data-major="Medicine & Medical Sciences">Medicine</button>
-      <button class="filter-chip" data-major="Law & Political Science">Law</button>
+      <button class="filter-chip" data-major="Business">Business</button>
+      <button class="filter-chip" data-major="Law & Political Sciences">Law</button>
+      <button class="filter-chip" data-major="Architecture & Design">Architecture</button>
+      <button class="filter-chip" data-major="Music & Performative Arts">Music</button>
     </div>
     <div id="profiles-grid" class="profiles-grid">
       <div class="loading-state" style="grid-column:1/-1;">Loading profiles…</div>
@@ -665,9 +667,13 @@
           <div class="form-field">
             <label class="form-label">Faculty / Major</label>
             <select class="form-select" id="reg-major">
-              <option>Business Administration</option><option>Engineering</option><option>Computer Science</option>
-              <option>Medicine & Medical Sciences</option><option>Arts & Social Sciences</option>
-              <option selected>Law & Political Science</option><option>Architecture & Design</option><option>Sciences</option>
+              <option>Arts & Sciences</option>
+              <option>Engineering</option>
+              <option>Medicine & Medical Sciences</option>
+              <option>Business</option>
+              <option>Law & Political Sciences</option>
+              <option>Architecture & Design</option>
+              <option>Music & Performative Arts</option>
             </select>
           </div>
           <div class="form-field"><label class="form-label">GPA (out of 4.0)</label><input class="form-input" type="text" id="reg-gpa" placeholder="e.g. 3.75"/></div>
@@ -730,13 +736,13 @@
     <div style="margin-bottom:8px;margin-top:-12px;font-size:0.78rem;font-weight:600;color:var(--grey);letter-spacing:0.06em;text-transform:uppercase;">Filter by Field</div>
     <div class="filter-bar" id="opp-major-filters" style="margin-bottom:28px;">
       <button class="filter-chip active" data-major="all">All Fields</button>
-      <button class="filter-chip" data-major="Business Administration">Business</button>
-      <button class="filter-chip" data-major="Law & Political Science">Law</button>
+      <button class="filter-chip" data-major="Arts & Sciences">Arts & Sciences</button>
       <button class="filter-chip" data-major="Engineering">Engineering</button>
-      <button class="filter-chip" data-major="Computer Science">Computer Science</button>
       <button class="filter-chip" data-major="Medicine & Medical Sciences">Medicine</button>
+      <button class="filter-chip" data-major="Business">Business</button>
+      <button class="filter-chip" data-major="Law & Political Sciences">Law</button>
       <button class="filter-chip" data-major="Architecture & Design">Architecture</button>
-      <button class="filter-chip" data-major="Arts & Social Sciences">Arts & Social</button>
+      <button class="filter-chip" data-major="Music & Performative Arts">Music</button>
     </div>
     <div id="opp-list" class="opp-grid">
       <div class="loading-state">Loading opportunities…</div>
@@ -835,8 +841,14 @@
             <div class="form-field">
               <label class="form-label">Target Major(s)</label>
               <select class="form-select" id="post-major" disabled>
-                <option>All Majors</option><option>Business Administration</option><option>Engineering</option>
-                <option>Computer Science</option><option>Law & Political Science</option><option>Architecture & Design</option>
+                <option>All Majors</option>
+                <option>Arts & Sciences</option>
+                <option>Engineering</option>
+                <option>Medicine & Medical Sciences</option>
+                <option>Business</option>
+                <option>Law & Political Sciences</option>
+                <option>Architecture & Design</option>
+                <option>Music & Performative Arts</option>
               </select>
             </div>
             <div class="form-field"><label class="form-label">Location</label><input class="form-input" type="text" id="post-location" placeholder="Beirut / Remote / Hybrid" disabled/></div>
@@ -854,8 +866,14 @@
       <div class="section-divider"><hr/><span>Search &amp; Filter Student Profiles</span><hr/></div>
       <div class="students-filter">
         <select class="form-select" id="biz-filter-major" onchange="filterBizProfiles()">
-          <option value="">All Majors</option><option>Business Administration</option><option>Computer Science</option>
-          <option>Engineering</option><option>Law &amp; Political Science</option><option>Architecture &amp; Design</option>
+          <option value="">All Majors</option>
+          <option>Arts &amp; Sciences</option>
+          <option>Engineering</option>
+          <option>Medicine &amp; Medical Sciences</option>
+          <option>Business</option>
+          <option>Law &amp; Political Sciences</option>
+          <option>Architecture &amp; Design</option>
+          <option>Music &amp; Performative Arts</option>
         </select>
         <select class="form-select" id="biz-filter-gpa" onchange="filterBizProfiles()">
           <option value="">Min GPA — Any</option><option value="3.0">3.0+</option><option value="3.5">3.5+</option><option value="3.75">3.75+</option>
