@@ -678,6 +678,10 @@
           </div>
           <div class="form-field"><label class="form-label">GPA (out of 4.0)</label><input class="form-input" type="text" id="reg-gpa" placeholder="e.g. 3.75"/></div>
         </div>
+        <div class="form-field">
+          <label class="form-label">Specific Major / Specialisation</label>
+          <input class="form-input" type="text" id="reg-major-detail" placeholder="e.g. Civil Engineering, Corporate Law, Finance…"/>
+        </div>
         <div class="form-row">
           <div class="form-field">
             <label class="form-label">Year of Study</label>
@@ -1143,6 +1147,7 @@ async function register() {
     first_name:    document.getElementById('reg-firstname').value.trim(),
     last_name:     document.getElementById('reg-lastname').value.trim(),
     major:         document.getElementById('reg-major').value,
+    major_detail:  document.getElementById('reg-major-detail').value.trim(),
     gpa:           parseFloat(document.getElementById('reg-gpa').value) || null,
     year_of_study: document.getElementById('reg-year').value,
     location:      document.getElementById('reg-location').value,
@@ -1315,7 +1320,7 @@ function renderProfiles(profiles, gridId) {
       <div class="profile-card">
         <div class="profile-header">
           <div class="avatar ${colors[i % colors.length]}">${initials}</div>
-          <div><div class="profile-name">${p.first_name || ''} ${p.last_name || ''}</div><div class="profile-major">${p.major || ''}</div></div>
+          <div><div class="profile-name">${p.first_name || ''} ${p.last_name || ''}</div><div class="profile-major">${p.major || ''}${p.major_detail ? ' – ' + p.major_detail : ''}</div></div>
           ${p.gpa ? `<div class="profile-gpa">GPA ${parseFloat(p.gpa).toFixed(1)}</div>` : ''}
         </div>
         <div class="profile-skills">${skills}</div>
@@ -1458,7 +1463,7 @@ async function loadDashboard() {
     const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || currentUser.email;
     document.getElementById('dashboard-greeting').textContent = `Welcome back, ${profile.first_name || 'there'}!`;
     document.getElementById('dash-name').textContent          = name;
-    document.getElementById('dash-major').textContent         = `${profile.major || ''} · ${profile.year_of_study || ''}`;
+    document.getElementById('dash-major').textContent         = `${profile.major || ''}${profile.major_detail ? ' – ' + profile.major_detail : ''} · ${profile.year_of_study || ''}`;
     document.getElementById('dash-avatar').textContent        = ((profile.first_name||'?')[0] + (profile.last_name||'?')[0]).toUpperCase();
     document.getElementById('dash-stats').innerHTML = `
       <div class="profile-stat"><span class="profile-stat-label">GPA</span><span class="profile-stat-value">${profile.gpa || '—'}</span></div>
@@ -1525,7 +1530,7 @@ async function loadBizDashboard() {
   if (allApps && allApps.length > 0) {
     const studentIds = [...new Set(allApps.map(a => a.student_id))];
     const { data: profileRows, error: profileErr } = await sb.from('profiles')
-      .select('id, first_name, last_name, major, gpa, skills, location')
+      .select('id, first_name, last_name, major, major_detail, gpa, skills, location')
       .in('id', studentIds);
     if (profileErr) console.error('Profile fetch error:', profileErr);
     if (profileRows) profileRows.forEach(p => profileMap[p.id] = p);
@@ -1557,7 +1562,7 @@ async function loadBizDashboard() {
             ? `${p.first_name || ''} ${p.last_name || ''}`.trim()
             : '(Profile not loaded)';
           const displayMeta = [
-            p.major || '',
+            p.major ? (p.major + (p.major_detail ? ' – ' + p.major_detail : '')) : '',
             p.gpa ? 'GPA ' + parseFloat(p.gpa).toFixed(1) : '',
             p.skills ? p.skills.split(',').slice(0,3).map(s => s.trim()).join(', ') : ''
           ].filter(Boolean).join(' · ');
